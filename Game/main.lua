@@ -1,13 +1,26 @@
 
 local Pet = require("Pet")
-
-p1 = Pet.New()
-p2 = Pet.New()
-
-print(p1.health)
-print(p2.health)
-p1.setX(1)
-print(p1.health)
+local Utils = require("Utils")
+local Animation = require("Animation")
 
 
-print("Hello world!")
+function love.load()
+    -- animationSleep = Animation.New().initFromFile(
+    --     'Sprites/pikachu_dormindo.png',
+    --     344, 344, 2
+    -- ).setScale(1.5).xToMiddle().yToMiddle()
+
+    born = Animation.New().initFromDirectory(
+        'Sprites/Born/', 31, 4
+    ).setScale(10).xToMiddle().yToMiddle()
+    print(born)
+end
+
+function love.draw()
+    -- animationSleep.display()
+    born.display()
+end
+
+function love.update(time)
+    born.update(time)
+end

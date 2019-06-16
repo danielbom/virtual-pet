@@ -38,11 +38,6 @@ function Pet.New()
         -- Controll
         last_update = os.time()
     }
-
-    function self.setX(i)
-        self.health = i
-    end
-
     return self
 end
 
