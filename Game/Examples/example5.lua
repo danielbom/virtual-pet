@@ -166,6 +166,7 @@ function getAnimationLast()
         return "animationTired"
     end
 end
+
 function setAnimation(animacao)
     if animacao == "animationNormal" then
         return animationNormal
@@ -613,33 +614,4 @@ function love.mousereleased( mx, my, button )
             hasPoop = false
         end
     end
- end
-
- function randomFloat(lower, greater)
-    return lower + math.random()  * (greater - lower);
-end
-
-function newAnimation(image, width, height, duration)
-    local animation = {}
-    animation.spriteSheet = image;
-    animation.quads = {};
-    
-    for y = 0, image:getHeight() - height, height do
-        for x = 0, image:getWidth() - width, width do
-            table.insert(animation.quads, love.graphics.newQuad(x, y, width, height, image:getDimensions()))
-        end
-    end
-    
-    animation.duration = duration or 1
-    animation.currentTime = 0
-    
-    return animation
-end
-
-function middleX(imageX)
-    return (love.graphics.getWidth() / 2) - (imageX / 2)
-end
-
-function middleY(imageY)
-    return (love.graphics.getHeight() / 2) - (imageY / 2)
 end

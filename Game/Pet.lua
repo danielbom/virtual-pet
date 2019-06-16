@@ -38,6 +38,18 @@ function Pet.New()
         -- Controll
         last_update = os.time()
     }
+
+    function self.init(...)
+        local kargs = {...}
+        for key, value in pairs(kargs) do
+            self[key] = value
+        end
+    end
+
+    function self.update(time)
+
+    end
+
     return self
 end
 

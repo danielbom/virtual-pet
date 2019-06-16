@@ -76,6 +76,7 @@ function Animation.New()
     function self.display()
         local shift = self.currentTime / self.duration * #self.quads
         local sprite = (math.floor(shift) % #self.spritesList) + 1
+        print(sprite)
         if self.mode == 'file' then
             love.graphics.draw(
                 self.spriteSheet,
@@ -85,7 +86,6 @@ function Animation.New()
                 self.scale
             )
         elseif self.mode == 'dir' then
-            print(sprite)
             love.graphics.draw(
                 self.spritesList[sprite],
                 self.quads[sprite],

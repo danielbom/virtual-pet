@@ -5,22 +5,18 @@ local Animation = require("Animation")
 
 
 function love.load()
-    -- animationSleep = Animation.New().initFromFile(
-    --     'Sprites/pikachu_dormindo.png',
-    --     344, 344, 2
-    -- ).setScale(1.5).xToMiddle().yToMiddle()
-
-    born = Animation.New().initFromDirectory(
-        'Sprites/Born/', 31, 4
-    ).setScale(10).xToMiddle().yToMiddle()
-    print(born)
+    animations = {
+        born = Animation.New().initFromDirectory(
+            'Sprites/Born/', 31, 4
+        ).setScale(10).xToMiddle().yToMiddle()
+    }
+    animation = "born"
 end
 
 function love.draw()
-    -- animationSleep.display()
-    born.display()
+    animations[animation].display()
 end
 
 function love.update(time)
-    born.update(time)
+    animations[animation].update(time)
 end
