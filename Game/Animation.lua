@@ -75,7 +75,6 @@ function Animation.New()
     function self.display()
         local shift = self.currentTime / self.duration * #self.quads
         local sprite = (math.floor(shift) % #self.spritesList) + 1
-        print(sprite)
         if self.mode == 'file' then
             love.graphics.draw(
                 self.spriteSheet,

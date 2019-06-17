@@ -1,0 +1,7 @@
+Studying 9 2
+Sleeping 5 1
+Denying 2 1
+Idle 2 1
+Love 5 1.5
+Sick 2 1
+Born 31 4
