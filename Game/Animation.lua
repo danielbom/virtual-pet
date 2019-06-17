@@ -38,7 +38,6 @@ function Animation.New()
             )
             table.insert(self.quads, quad)
             table.insert(self.spritesList, image)
-            print('Load file: '..dirname..i..'.png')
         end
 
         self.mode = "dir"
@@ -107,6 +106,12 @@ function Animation.New()
 
     function self.yToMiddle()
         self.y = Utils.middleY(self.height * self.scale)
+        return self
+    end
+
+    function self.toMiddle()
+        self.xToMiddle()
+        self.yToMiddle()
         return self
     end
 

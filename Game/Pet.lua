@@ -44,6 +44,7 @@ function Pet.New()
         for key, value in pairs(kargs) do
             self[key] = value
         end
+        return self
     end
 
     function self.update(time)
