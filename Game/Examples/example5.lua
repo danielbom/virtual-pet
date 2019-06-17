@@ -16,16 +16,6 @@ function love.load()
     --Carregando valores da altura e largura da tela
     loveWidth = love.graphics.getWidth()
     loveHeight = love.graphics.getHeight()
-    
-    --Carregando animações
-    animationSleep = newAnimation(love.graphics.newImage("Sprites/pikachu_dormindo.png"), 344, 344, 2)
-    animationNormal = newAnimation(love.graphics.newImage("Sprites/pikachu_normal.png"), 344, 344, 1.5)
-    animationBad = newAnimation(love.graphics.newImage("Sprites/pikachu_triste.png"), 344, 344, 2)
-    animationSick = newAnimation(love.graphics.newImage("Sprites/pikachu_doente.png"), 344, 344, 2)
-    animationTired = newAnimation(love.graphics.newImage("Sprites/pikachu_cansado.png"), 344, 344, 2)
-    animationEgg = newAnimation(love.graphics.newImage("Sprites/Egg.png"), 344, 344, 1.5)
-    animationVaccione = newAnimation(love.graphics.newImage("Sprites/Vaccine.png"), 344, 344, 2)
-    
 
     --Imagens do Mini-Game
     game_base = love.graphics.newImage("MiniGame/game_base.png")
@@ -33,10 +23,6 @@ function love.load()
     game_rock = love.graphics.newImage("MiniGame/game_rock.png")
     game_scissors = love.graphics.newImage("MiniGame/game_scissors.png")
 
-    --Ajustando a janela (tamanho, titulo e fixa)
-    love.window.setMode(688, 688, {resizable=false, vsync=true}) 
-    love.graphics.setBackgroundColor(255,255,255)
-    
     --Inicializando Interface gráfica
     UINormal = love.graphics.newImage("UI/UIIconsActions.png");
     UIHungry =love.graphics.newImage("UI/UIHungrySelected.png");
@@ -92,25 +78,10 @@ function love.load()
     aTieGame = {{0,0,0}, "A TIE"}
     resultGame = {{0,0,0,}, "----"}
 
-    --Status VPET
-    numberRateHealth = 2/100 
-    healthRate = numberRateHealth
-
-    numberRateHappy = 5/100
-    happyRate = numberRateHappy 
-    
-    
-    numberRateHungry = 6/100
-    hungryRate = numberRateHungry 
-    
-
-    numberRateEnergy = 5/100
-    energyRate = numberRateEnergy
     selected = ""    
 
     carregarDados()
     --tempo
-    
     
     deltatime = os.difftime(os.time(),t1)
     if deltatime > 0 then
@@ -250,15 +221,6 @@ end
 
 function petUpdate(dt)
     if hungryPercent > 0 or energyPercent > 0 or happyPercent > 0 or healthPercent > 0 then
-        --hungry decremento
-        hungryPercentFloat = hungryPercentFloat - (hungryRate * randomFloat(0.8,1.1)) * dt
-        hungryPercent = math.floor( hungryPercentFloat)
-        --health decremento
-        healthPercentFloat = healthPercentFloat - (healthRate * randomFloat(0.8,1.1)) * dt
-        healthPercent = math.floor(healthPercentFloat)
-        --health decremento
-        happyPercentFloat = happyPercentFloat - (happyRate * randomFloat(0.8,1.1)) * dt
-        happyPercent = math.floor(happyPercentFloat)
         if not isSleep then
             --energy decremento
             energyPercentFloat = energyPercentFloat - (energyRate * randomFloat(0.8,1.1)) * dt
