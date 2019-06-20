@@ -104,30 +104,6 @@ function Pet.New()
         )
     end
 
-    function self.loadAnimations(directory)
-        local scalePet = 3
-        self.animations = ManagerAnimations.New()
-        -- for i in string.gmatch(a, "%w*") do print(#i) end
-        for line in love.filesystem.lines(directory..'descriptor.txt') do
-            local desc = {}
-            for word in string.gmatch(line, "[^%s]+") do
-                table.insert(desc, word)
-            end
-            if #desc == 3 then
-                self.animations.addAnimation(
-                    desc[1], Animation.New().initFromDirectory(
-                        directory..desc[1]..'/',
-                        tonumber(desc[2]),
-                        tonumber(desc[3])
-                    ).setScale(scalePet).toMiddle()
-                )
-                self.animations.setCurrentAnimation(desc[1])
-            end
-        end
-    end
-
-    self.loadAnimations(self.animationDir)
-
     return self
 end
 
