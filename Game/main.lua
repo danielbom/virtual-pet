@@ -8,7 +8,7 @@ local ManagerAnimations = require("ManagerAnimations")
 
 file = "Imagens/background.png"
 background = love.graphics.newImage(file)
-width, heigth = background:getWidth(), background:getHeight() - 1
+width, heigth = background:getWidth()-200, background:getHeight() - 1
 
 function love.load()
 
@@ -22,8 +22,6 @@ function love.load()
 end
 
 function love.draw()
-    love.graphics.clear()
-    
     love.graphics.draw(canvas, width, heigth)
     for i = 0, love.graphics.getWidth() / background:getWidth() do
         for j = 0, love.graphics.getHeight() / background:getHeight() do
@@ -36,5 +34,5 @@ function love.draw()
 end
 function love.update(time)
     pet.animations.update(time)
-    interface.loadButtons()
+    interface.loadButtons(width,heigth)
 end
