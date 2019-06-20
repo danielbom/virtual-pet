@@ -1,0 +1,6 @@
+[submodule "SUIT"]
+	path = SUIT
+	url = git://github.com/vrld/SUIT
+[submodule "Game/SUIT"]
+	path = Game/SUIT
+	url = git://github.com/vrld/SUIT
