@@ -9,10 +9,10 @@ local ManagerAnimations = require("ManagerAnimations")
 
 file = "Imagens/background.png"
 background = love.graphics.newImage(file)
-width, heigth = background:getWidth(), background:getHeight()
+width, height = background:getWidth(), background:getHeight()
 
 backgroundQuad = love.graphics.newQuad(
-    0, 0, width, heigth,
+    0, 0, width, height,
     background:getDimensions()
 )
 
@@ -23,18 +23,18 @@ function love.load()
         .toMiddle()
         .loadAnimations("/Sprites/Togepi/")
     
-    love.window.setMode(width, heigth, {resizable = true})
-    canvas = love.graphics.newCanvas(width, heigth)
+    love.window.setMode(width, height, {resizable = true})
+    canvas = love.graphics.newCanvas(width, height)
     interface = Interface.New()
 end
 
 function love.update(time)
     pet.update(time)
-    interface.loadButtons()
+    interface.loadButtons(width, height)
 end
 
 function love.draw()
-    love.graphics.draw(canvas, width, heigth)
+    love.graphics.draw(canvas, width, height)
     love.graphics.draw(background, backgroundQuad)
     -- for i = 0, love.graphics.getWidth() / background:getWidth() do
     --     for j = 0, love.graphics.getHeight() / background:getHeight() do
