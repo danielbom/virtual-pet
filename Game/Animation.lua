@@ -94,6 +94,14 @@ function Animation.New()
         end
     end
 
+    function self.hasFinished()
+        local finished = self.currentTime >= self.duration
+        if finished then
+            self.currentTime = 0
+        end
+        return finished
+    end
+
     function self.update(time)
         self.currentTime = self.currentTime + time
     end

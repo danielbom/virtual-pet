@@ -5,15 +5,14 @@ ManagerAnimation.__index = ManagerAnimation
 function ManagerAnimation.New()
     local self = {
         animations = {},
-        animation = nil
+        animation = nil,
+        next = nil,
+
+        x = 0, y = 0,
+        scale = 1,
+        rotation = 0
     }
 
-    function self.init(animations)
-        for key, value in pairs(animations) do
-            self.addAnimation(key, value)
-        end
-        return self
-    end
 
     function self.addAnimation(name, animation)
         self.animations[name] = animation
@@ -21,19 +20,28 @@ function ManagerAnimation.New()
         return self
     end
 
-    function self.setCurrentAnimation(name)
+    function self.setNext(animation) 
+        self.next = animation
+        return self
+    end
+
+    function self.setCurrent(name)
         self.animation = name
         return self
     end
 
     function self.display()
-        self.animations[self.animation].display()
+        local animation = self.animations[self.animation]
+        if self.next and animation.hasFinished() then
+            self.animation = self.next
+            self.next = nil
+        end
+        animation.display()
     end
 
     function self.update(time)
         self.animations[self.animation].update(time)
     end
-
 
     function self.loadAnimations(directory)
         self.animationDir = directory
@@ -44,8 +52,8 @@ function ManagerAnimation.New()
                 table.insert(desc, word)
             end
             if #desc == 3 then
-                self.animation = Animation
-                    .New().initFromDirectory(
+                self.animation = Animation.New()
+                    .initFromDirectory(
                         directory..desc[1]..'/',
                         tonumber(desc[2]),
                         tonumber(desc[3])

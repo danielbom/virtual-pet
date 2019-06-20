@@ -68,14 +68,45 @@ function Pet.New()
         self[attr] = self[attr] - (self[attr.."Rate"] * speed)
     end
 
-    function self.update(time)
+    function self.updateAttr()
         self.spendAttr("growth" ,-0.3)
         self.spendAttr("happy"  , 0.3)
         self.spendAttr("health" , 0.3)
         self.spendAttr("energy" , 0.3)
         self.spendAttr("hungry" , 0.3)
         self.spendAttr("thirsty", 0.3)
-        pet.animations.update(time)
+    end
+    
+    function self.updateState()
+        if self.health < 35 then
+            self.state = "sick"
+        elseif self.health > 99 and self.happy > 99 then
+            self.state = "love"
+        else
+            self.state = "idle"
+        end
+    end
+
+    function self.updateAnimation()
+        if self.state == "idle" then
+            self.animations.setNext("Idle")
+        elseif self.state == "love" then
+            self.animations.setNext("Love")
+        elseif self.state == "sick" then
+            self.animations.setNext("Sick")
+        elseif self.state == "studying" then
+            self.animations.setNext("Studying")
+        elseif self.state == "denying" then
+            self.animations.setNext("Denying")
+            self.state = "idle"
+        end
+    end
+
+    function self.update(time)
+        self.updateAttr()
+        self.updateState()
+        self.updateAnimation()
+        self.animations.update(time)
     end
 
     function self.displayStatus()
