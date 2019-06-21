@@ -44,13 +44,15 @@ function Pet.New()
         dirty  = false,
 
         -- Controll
-        happyRate   = 5/100,
-        growthRate  = 1/100,
-        healthRate  = 6/100,
-        energyRate  = 5/100,
-        hungryRate  = 3/100,
-        smartRate   = 1/100,
-        thirstyRate = 2/100,
+        rate = {
+            happy   = 5/100,
+            growth  = 1/100,
+            health  = 6/100,
+            energy  = 5/100,
+            hungry  = 3/100,
+            smart   = 1/100,
+            thirsty = 2/100,
+        },
 
         last_update = os.time(),
     }
@@ -64,7 +66,7 @@ function Pet.New()
     end
 
     function self.spendAttr(attr, speed)
-        self[attr] = self[attr] - (self[attr.."Rate"] * speed)
+        self[attr] = self[attr] - (self.rate[attr] * speed)
     end
 
     function self.updateAttr()
