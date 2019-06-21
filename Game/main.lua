@@ -2,8 +2,10 @@
 local Pet = require("Pet")
 local suit = require("SUIT")
 local Utils = require("Utils")
-local Interface = require ("Interface")
 local Animation = require("Animation")
+local Interface = require ("Interface")
+local Observable = require("Observable")
+local EnergyBar = require("EnergyBar")
 local ManagerAnimations = require("ManagerAnimations")
 
 
@@ -27,16 +29,28 @@ function love.load()
     
     interface = Interface.New()
 
+    energyBar = EnergyBar.New()
+    energyBar.animations = ManagerAnimations.New()
+        .setX(100).setY(0)
+        .loadAnimations("/Sprites/EnergyBar/")
+
     pet = Pet.New()
     pet.animations = ManagerAnimations.New()
         .setScale(3)
         .toMiddle()
         .loadAnimations("/Sprites/Togepi/")
+        
+    pet.alert = Observable.New()
+    pet.alert.register(energyBar, energyBar.update)
 end
 
 function love.update(time)
     -- Atualizando o pet
     pet.update(time)
+    pet.alert.notify(pet)
+    
+    -- Atualizando a barra de energia
+    energyBar.animations.update(time)
 
     -- Atualizando a interface
     interface.loadButtons(canvas.width, canvas.height)
@@ -52,6 +66,8 @@ function love.draw()
     -- Desenhando o pet
     pet.displayStatus()
     pet.animations.display()
+
+    energyBar.animations.display()
 
     -- Desenhando os componentes de interface
     interface.draw()

@@ -52,8 +52,6 @@ function Pet.New()
         thirstyRate = 2/100,
 
         last_update = os.time(),
-        animationDir = "/Sprites/Togepi/",
-
     }
 
     function self.init(...)

@@ -68,8 +68,7 @@ function ManagerAnimation.New()
                 if self.ymiddle then
                     self.animation.yToMiddle()
                 end
-                self.animations[desc[1]] = self.animation
-                self.animation = desc[1]
+                self.addAnimation(desc[1], self.animation)
             end
         end
         return self
