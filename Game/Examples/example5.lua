@@ -5,13 +5,6 @@ local gameMusic = love.audio.newSource("/Audios/Music/game.mp3", "stream")
 local healAudio = love.audio.newSource("/Audios/Audios/heal.mp3", "static")
 local winGameAudio = love.audio.newSource("/Audios/Audios/winGame.mp3", "static")
 
-energyPercent = 100
-happyPercent = 100
-healthPercent = 100
-hungryPercent = 100
-
-dt = 1
-
 function love.load()
     --Carregando valores da altura e largura da tela
     loveWidth = love.graphics.getWidth()
@@ -94,20 +87,6 @@ function love.load()
         hungryPercent = 0
     end
 end
-function escreverDados()
-    local data = getAnimation() .. "\n" ..
-                tostring(hasPoop) .. "\n" ..
-                tostring(isSleep) .. "\n" ..
-                tostring(isSick) .. "\n" ..
-                state .. "\n" .. 
-                healthPercent .. "\n" ..
-                happyPercent .. "\n" .. 
-                hungryPercent .. "\n" ..
-                energyPercent .. "\n" .. 
-                tonumber(os.time())
-    
-    love.filesystem.write("data.txt", data)
-end
 function getAnimation()
     if animation == animationNormal then
         return "animationNormal"
@@ -149,73 +128,6 @@ function setAnimation(animacao)
         return animationSick
     elseif animacao == "animationTired" then
         return animationTired
-    end
-end
-
-function carregarDados()
-    -- 1-animation
-    -- 2-coco
-    -- 3-dormindo
-    -- 4-doente
-    -- 5-estado
-    -- 6-vida
-    -- 7-felicidade
-    -- 8-fome
-    -- 9-energia
-    -- 10-tempo
-
-    if love.filesystem.exists("data.txt") then
-        i = 1
-        for line in love.filesystem.lines("data.txt") do
-            if i == 1 then
-              animation = setAnimation(tostring(line))  
-              animationLast = animation
-            elseif i == 2 then
-                if tostring(line) == "true" then
-                    hasPoop = true
-                else
-                    hasPoop = false
-                end
-                hasPoopAux = hasPoop
-            elseif i == 3 then
-                if tostring(line) == "true" then
-                    isSleep = true
-                else
-                    isSleep = false
-                end
-                
-            elseif i == 4 then
-                if tostring(line) == "true" then
-                    isSick = true
-                else
-                    isSick = false
-                end
-    
-            elseif i == 5 then
-                state = tostring(line)
-
-            elseif i == 6 then
-                healthPercent = tonumber(line)
-                healthPercentFloat = healthPercent
-                
-            elseif i == 7 then
-                happyPercent = tonumber(line)
-                happyPercentFloat = happyPercent
-                
-            elseif i == 8 then
-                hungryPercent = tonumber(line)
-                hungryPercentFloat = hungryPercent
-
-            elseif i == 9 then
-                energyPercent = tonumber(line)
-                energyPercentFloat = energyPercent
-            elseif i == 10 then
-                t1 = tonumber(line)
-            end
-            i = i+1
-        end
-    else
-        print("Não foi possivel abrir o arquivo")
     end
 end
 
