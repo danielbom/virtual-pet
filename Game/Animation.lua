@@ -52,10 +52,10 @@ function Animation.New()
         local image = love.graphics.newImage(filename)
         self.spriteSheet = image
         
-        for y = 0, image:getHeight() - height, height do
-            for x = 0, image:getWidth() - width, width do
+        for y = 0, image:getHeight() - self.height, self.height do
+            for x = 0, image:getWidth() - self.width, self.width do
                 local quad = love.graphics.newQuad(
-                    x, y, width, height,
+                    x, y, self.width, self.height,
                     image:getDimensions()
                 )
                 table.insert(self.quads, quad)
@@ -64,11 +64,11 @@ function Animation.New()
 
         self.mode = "file"
     end
-    function self.initFromFile(filename, width, height, duration)
-        self._loadFromFiles(filename)        
+    function self.initFromFile(filename, width, height, duration, steps)
         self.duration = duration
         self.height = height
         self.width = width
+        self._loadFromFiles(filename)      
         return self
     end
 

@@ -10,7 +10,9 @@ function ManagerAnimation.New()
 
         x = 0, y = 0,
         scale = 1,
-        rotation = 0
+        rotation = 0,
+
+        animationDir = ""
     }
 
 

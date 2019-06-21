@@ -20,6 +20,7 @@ weight   [1:7]
 dirty    [boolean]
 
 --]]
+local Json = require("Json")
 local Utils = require("Utils")
 local Animation = require("Animation")
 local ManagerAnimations = require("ManagerAnimations")
@@ -131,6 +132,37 @@ function Pet.New()
         love.graphics.printf(
             "smart: "..math.floor(self.smart), width, base + 120, 135, "center"
         )
+    end
+
+    function self.save(user)
+        local data = {
+            animation = self.animations.animationDir,
+            happy   = self.happy,
+            growth  = self.growth,
+            health  = self.health,
+            energy  = self.energy,
+            hungry  = self.hungry,
+            thirsty = self.thirsty,
+            smart   = self.smart,
+            weight  = self.weight,
+            state   = self.state,
+            dirty   = self.dirty,
+        }
+        local filename = user.."Data.json"
+        local string = Json.stringify(data)
+        local file = io.open(filename,"w")
+        file:write(string)
+        file:close()
+    end
+
+    function self.load(user)
+        local filename = user.."Data.json"
+        local file = io.open(filename,"r")
+        local string = file:read()
+        print(string)
+        local object = Json.parse(string)
+        file:close()
+        self.init(unpack(object))
     end
 
     return self

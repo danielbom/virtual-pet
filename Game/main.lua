@@ -2,12 +2,15 @@
 local Pet = require("Pet")
 local suit = require("SUIT")
 local Utils = require("Utils")
+local EnergyBar = require("EnergyBar")
 local Animation = require("Animation")
 local Interface = require ("Interface")
 local Observable = require("Observable")
-local EnergyBar = require("EnergyBar")
 local ManagerAnimations = require("ManagerAnimations")
 
+t = 0
+d = 30
+user = "Daniel"
 
 function love.load()
     -- Carregando o background
@@ -42,9 +45,18 @@ function love.load()
         
     pet.alert = Observable.New()
     pet.alert.register(energyBar, energyBar.update)
+
+    pet.save(user)
+    pet.load(user)
 end
 
 function love.update(time)
+    print(t)
+    t = t + time
+    if t >= d then
+        pet.save(user)
+        t = 0
+    end
     -- Atualizando o pet
     pet.update(time)
     pet.alert.notify(pet)
