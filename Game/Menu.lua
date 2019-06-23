@@ -1,4 +1,5 @@
 local suit = require("SUIT")
+Router = require("Router")
 
 Game = {}
 Game.__index = Game
@@ -12,6 +13,7 @@ function Game.update(time)
     quit = suit.Button("Quit", 500, 300, 50, 70)
     if start.hit then
         print("Start!!!")
+        Router.setState ("Game")
     elseif load.hit then
         print("Load!!!")
     elseif quit.hit then
