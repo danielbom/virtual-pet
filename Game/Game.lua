@@ -1,4 +1,5 @@
 
+Router = require("Router")
 local Pet = require("Pet")
 local suit = require("SUIT")
 local Utils = require("Utils")
@@ -11,6 +12,7 @@ local ManagerAnimations = require("ManagerAnimations")
 local t = 0
 local d = 30
 local user = "Daniel"
+
 Game = {}
 Game.__index = Game
 
@@ -54,7 +56,7 @@ function Game.load()
 end
 
 function Game.update(time)
-    print(t)
+    -- print(t)
     t = t + time
     if t >= d then
         pet.save(user)
@@ -86,6 +88,28 @@ function Game.draw()
 
     -- Desenhando os componentes de interface
     interface.draw()
+end
+
+
+
+
+function Game.mousepressed( x, y, button, isTouch )
+    if x >= 600 and x <= 700 and y >= 250 and y <= 350 then
+        print("press", x, y)
+    end
+end
+
+function Game.mousereleased( x, y, button, isTouch )
+    if x >= 600 and x <= 700 and y >= 250 and y <= 350 then
+        print("release", x, y)
+        Router.setState("Menu")
+    end
+end
+
+function Game.mousemoved( x, y, dx, dy, istouch )
+    if x >= 600 and x <= 700 and y >= 250 and y <= 350 then
+        -- print("moved", x, y)
+    end
 end
 
 return Game

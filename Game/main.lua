@@ -1,8 +1,10 @@
+Router = require("Router")
 local Game = require("Game")
-local Controller = require("Controller")
+local Menu = require("Menu")
 
 function love.load()
-    Controller.New()
+    Router
+        .add("Menu", Menu)
         .add("Game", Game)
-        .setState("Game")
+        .setState("Menu")
 end

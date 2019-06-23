@@ -1,23 +1,21 @@
-Controller = {}
-Controller.__index = Controller
+Router = {}
+Router.__index = Router
 
 
-function Controller.New()
-    local self = {}
-
-    function self.add(name, obj)
-        self[name] = obj
-        return self
-    end
-
-    function self.setState(name)
-        self[name].load()
-        love.update = self[name].update
-        love.draw = self[name].draw
-        return self
-    end
-
-    return self
+function Router.add(name, obj)
+    Router[name] = obj
+    return Router
 end
 
-return Controller
+function Router.setState(name)
+    print("State: ", name)
+    Router[name].load()
+    love.update = Router[name].update
+    love.draw = Router[name].draw
+    love.mousepressed = Router[name].mousepressed
+    love.mousereleased = Router[name].mousereleased
+    love.mousemoved = Router[name].mousemoved
+    return Router
+end
+
+return Router
