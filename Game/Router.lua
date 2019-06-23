@@ -15,6 +15,8 @@ function Router.setState(name)
     love.mousepressed = Router[name].mousepressed
     love.mousereleased = Router[name].mousereleased
     love.mousemoved = Router[name].mousemoved
+    love.textinput = Router[name].textinput
+    love.keypressed = Router[name].keypressed
     return Router
 end
 

@@ -1,7 +1,4 @@
-
-Router = require("Router")
 local Pet = require("Pet")
-local suit = require("SUIT")
 local Utils = require("Utils")
 local EnergyBar = require("EnergyBar")
 local Animation = require("Animation")
@@ -11,11 +8,16 @@ local ManagerAnimations = require("ManagerAnimations")
 
 local t = 0
 local d = 30
-local user = "Daniel"
 
 Game = {}
 Game.__index = Game
 
+local function loadUserData()
+    -- Carregando os dados usuário
+    local file = io.open(user.."Data.json", "r")
+    local ternary = file and pet.load(user) or pet.save(user)
+    file.close()
+end
 
 function Game.load()
     -- Carregando o background
@@ -51,8 +53,9 @@ function Game.load()
     pet.alert = Observable.New()
     pet.alert.register(energyBar, energyBar.update)
 
-    pet.save(user)
-    pet.load(user)
+    loadUserData()
+    print(pet.state)
+    pet.animations.setCurrent(pet.state)
 end
 
 function Game.update(time)

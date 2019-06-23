@@ -20,7 +20,6 @@ weight   [1:7]
 dirty    [boolean]
 
 --]]
-local Json = require("Json")
 local Utils = require("Utils")
 local Animation = require("Animation")
 local ManagerAnimations = require("ManagerAnimations")
@@ -57,8 +56,7 @@ function Pet.New()
         last_update = os.time(),
     }
 
-    function self.init(...)
-        local kargs = {...}
+    function self.init(kargs)
         for key, value in pairs(kargs) do
             self[key] = value
         end
@@ -80,26 +78,26 @@ function Pet.New()
     
     function self.updateState()
         if self.health < 35 then
-            self.state = "sick"
+            self.state = "Sick"
         elseif self.health > 99 and self.happy > 99 then
-            self.state = "love"
+            self.state = "Love"
         else
-            self.state = "idle"
+            self.state = "Idle"
         end
     end
 
     function self.updateAnimation()
-        if self.state == "idle" then
+        if self.state == "Idle" then
             self.animations.setNext("Idle")
-        elseif self.state == "love" then
+        elseif self.state == "Love" then
             self.animations.setNext("Love")
-        elseif self.state == "sick" then
+        elseif self.state == "Sick" then
             self.animations.setNext("Sick")
-        elseif self.state == "studying" then
+        elseif self.state == "Studying" then
             self.animations.setNext("Studying")
-        elseif self.state == "denying" then
+        elseif self.state == "Denying" then
             self.animations.setNext("Denying")
-            self.state = "idle"
+            self.state = "Idle"
         end
     end
 
@@ -161,10 +159,8 @@ function Pet.New()
         local filename = user.."Data.json"
         local file = io.open(filename,"r")
         local string = file:read()
-        print(string)
         local object = Json.parse(string)
-        file:close()
-        self.init(unpack(object))
+        self.init(object)
     end
 
     return self

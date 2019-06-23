@@ -1,6 +1,12 @@
+user = ""
+
+suit = require("SUIT")
+Json = require("Json")
+
 Router = require("Router")
-local Game = require("Game")
-local Menu = require("Menu")
+Game = require("Game")
+Menu = require("Menu")
+
 
 function love.load()
     Router
