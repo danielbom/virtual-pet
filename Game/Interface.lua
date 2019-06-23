@@ -9,6 +9,9 @@ function Interface.New()
         width = width - 50
         heigth = heigth - 25
         show_message = false
+        suit.theme.color.normal = {bg = {0,0,255}, fg = {255,0,0}}
+        suit.theme.color.hovered = {bg = {0, 255, 0}, fg = {0, 0, 255}}
+        suit.theme.color.active = {bg = {0,0,0}, fg = {0, 255, 0}}
         suit.Button("Teste", 0, (heigth/6) - 70, 50, 70)
 
         if suit.Button("jorge", 0, ((heigth/6)*2) - 70, 50, 70).hit then

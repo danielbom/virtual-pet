@@ -23,6 +23,7 @@ dirty    [boolean]
 local Utils = require("Utils")
 local Animation = require("Animation")
 local ManagerAnimations = require("ManagerAnimations")
+local suit = require("SUIT")
 
 Pet = {}
 Pet.__index = Pet
@@ -111,6 +112,9 @@ function Pet.New()
     function self.displayStatus()
         local width = love.graphics.getWidth() / 2 - 66
         local base = 100
+        local slider = {value = self.happy, min = 0, max = 100}
+        local teste = suit.Slider(slider,100,100, 200,20)
+        teste.hit = nil
         love.graphics.printf(
             "happy: "..math.floor(self.happy), width, base, 135, "center"
         )

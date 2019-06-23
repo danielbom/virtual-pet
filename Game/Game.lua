@@ -23,6 +23,7 @@ function Game.load()
     -- Carregando o background
     local image = love.graphics.newImage("Imagens/background.png")
     width, height = image:getWidth(), image:getHeight()
+    print (width, height)
     background = {
         image = image,
         quad = love.graphics.newQuad( 0, 0,
@@ -31,8 +32,8 @@ function Game.load()
     }
     -- Definindo a janela
     canvas = {
-        width = width,
-        height = height,
+        width = 800,
+        height = 600,
     }
     love.window.setMode(canvas.width, canvas.height, {resizable = true})
     canvas.format = love.graphics.newCanvas(canvas.width, canvas.height)
@@ -78,18 +79,23 @@ end
 
 function Game.draw()
     -- Desenhando a janela
+
     love.graphics.draw(canvas.format, canvas.width, canvas.height)
 
     -- Desenhando o background
-    love.graphics.draw(background.image, background.quads)
+    love.graphics.translate(-500, 0)
+    love.graphics.draw( background.image, background.quads)
 
     -- Desenhando o pet
+    love.graphics.translate(500, 0)
     pet.displayStatus()
+    love.graphics.translate(0, 200)
     pet.animations.display()
-
+    love.graphics.translate(0, -200)
     energyBar.animations.display()
 
     -- Desenhando os componentes de interface
+    love.graphics.translate(0, 0)
     interface.draw()
 end
 
