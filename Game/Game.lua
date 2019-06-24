@@ -23,7 +23,6 @@ function Game.load()
     -- Carregando o background
     local image = love.graphics.newImage("Imagens/background.png")
     width, height = image:getWidth(), image:getHeight()
-    print (width, height)
     background = {
         image = image,
         quad = love.graphics.newQuad( 0, 0,

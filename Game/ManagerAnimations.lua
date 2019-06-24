@@ -34,6 +34,7 @@ function ManagerAnimation.New()
 
     function self.display()
         local animation = self.animations[self.animation]
+        print (animation)
         if self.next and animation.hasFinished() then
             self.animation = self.next
             self.next = nil
