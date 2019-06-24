@@ -15,8 +15,12 @@ Game.__index = Game
 local function loadUserData()
     -- Carregando os dados usuário
     local file = io.open(user.."Data.json", "r")
-    local ternary = file and pet.load(user) or pet.save(user)
-    file.close()
+    if file then
+        pet.load(user)
+        file.close()
+    else
+        pet.save(user)
+    end
 end
 
 function Game.load()
@@ -54,7 +58,6 @@ function Game.load()
     pet.alert.register(energyBar, energyBar.update)
 
     loadUserData()
-    print(pet.state)
     pet.animations.setCurrent(pet.state)
 end
 

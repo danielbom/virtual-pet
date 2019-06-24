@@ -40,7 +40,7 @@ function Pet.New()
         smart   = 50,
         
         weight  = 1,
-        state  = "normal",
+        state  = "Idle",
         dirty  = false,
 
         -- Controll
@@ -88,16 +88,8 @@ function Pet.New()
     end
 
     function self.updateAnimation()
-        if self.state == "Idle" then
-            self.animations.setNext("Idle")
-        elseif self.state == "Love" then
-            self.animations.setNext("Love")
-        elseif self.state == "Sick" then
-            self.animations.setNext("Sick")
-        elseif self.state == "Studying" then
-            self.animations.setNext("Studying")
-        elseif self.state == "Denying" then
-            self.animations.setNext("Denying")
+        self.animations.setNext(self.state)
+        if self.state == "Denying" then
             self.state = "Idle"
         end
     end

@@ -34,7 +34,6 @@ function ManagerAnimation.New()
 
     function self.display()
         local animation = self.animations[self.animation]
-        print (animation)
         if self.next and animation.hasFinished() then
             self.animation = self.next
             self.next = nil
@@ -48,7 +47,6 @@ function ManagerAnimation.New()
 
     function self.loadAnimations(directory)
         self.animationDir = directory
-        -- for i in string.gmatch(a, "%w*") do print(#i) end
         for line in love.filesystem.lines(directory..'descriptor.txt') do
             local desc = {}
             for word in string.gmatch(line, "[^%s]+") do

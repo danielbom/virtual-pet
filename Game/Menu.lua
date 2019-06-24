@@ -41,34 +41,23 @@ function inputs.check()
 end
 
 function Menu.update(time)
-    local start = suit.Button("Start Game", 300, 300, 50, 70)
-    local create = suit.Button("Create a pet", 400, 300, 50, 70)
-    local load = suit.Button("Load Game", 500, 300, 50, 70)
-    local quit = suit.Button("Quit", 600, 300, 50, 70)
-
-    if start.hit then
-        if players.check(inputs.login.text, inputs.pass.text) then
-            players.data[inputs.login.text] = inputs.pass.text
-            players.save()
-            user = inputs.login.text
-            Router.setState("Game")
-        else
-            print("Usuário ou senha incorretos.")
-
-        end
-    elseif create.hit then
-        local p = players.check(inputs.login.text, inputs.pass.text)
-        if (inputs.login.text and inputs.pass.text) and p == false then
+    local create = suit.Button("Create a pet", 300, 300, 50, 70)
+    local load = suit.Button("Load Game", 400, 300, 50, 70)
+    local quit = suit.Button("Quit", 500, 300, 50, 70)
+    
+    if create.hit then
+        if inputs.check() then
             players.data[inputs.login.text] = inputs.pass.text
             players.save()
             user = inputs.login.text
             Router.setState("Game")
         else 
-            print ("usuário já existe")
+            print ("Usuário ou senha inválidos.")
         end
     elseif load.hit then
         if inputs.check() and players.check(inputs.login.text, inputs.pass.text) then
-            print("Load!!!")
+            user = inputs.login.text
+            Router.setState("Game")
         else
             print("Usuário ou senha incorretos.")
         end
