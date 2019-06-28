@@ -35,8 +35,8 @@ function Game.load()
     }
     -- Definindo a janela
     canvas = {
-        width = 800,
-        height = 600,
+        width = love.graphics.getWidth(),
+        height = love.graphics.getHeight(),
     }
     love.window.setMode(canvas.width, canvas.height, {resizable = true})
     canvas.format = love.graphics.newCanvas(canvas.width, canvas.height)
@@ -81,7 +81,6 @@ end
 
 function Game.draw()
     -- Desenhando a janela
-
     love.graphics.draw(canvas.format, canvas.width, canvas.height)
 
     -- Desenhando o background
