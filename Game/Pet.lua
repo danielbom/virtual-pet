@@ -78,8 +78,10 @@ function Pet.New()
     end
     
     function self.updateState()
-        if self.health < 35 then
+        if self.health < 35 and self.health > 0 then
             self.state = "Sick"
+        elseif self.health <= 0 then 
+            self.state = "Dead"
         elseif self.health > 99 and self.happy > 99 then
             self.state = "Love"
         else

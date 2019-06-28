@@ -1,4 +1,4 @@
-local Pet = require("Pet")
+Pet = require("Pet")
 local Utils = require("Utils")
 local EnergyBar = require("EnergyBar")
 local Animation = require("Animation")
@@ -90,7 +90,9 @@ function Game.draw()
 
     -- Desenhando o pet
     love.graphics.translate(500, 0)
+    love.graphics.setColor(255,0,0, 255)
     pet.displayStatus()
+    love.graphics.setColor(100,180,50,255)
     love.graphics.translate(0, 200)
     pet.animations.display()
     love.graphics.translate(0, -200)
