@@ -1,26 +1,27 @@
 local suit = require("SUIT")
 Interface = {}
 Interface._index = Interface
+width = 0
+heigth = 0
 
 function Interface.New()
     local self = {}
 
-    function self.drawStatus(isDraw)
-        if isDraw == true then
-            status = love.graphics.newQuad(0, 70, 100, 100, 0)
-            love.graphics.draw(pet.displayStatus(), status)
-        end
-    end
-
-    function self.loadButtons(width, heigth)
-        width = width - 50
-        heigth = heigth - 25
-        show_message = false
+    function self.loadButtons(width1, heigth1)
+        width = width1 - 50
+        heigth = heigth1 - 25
+        
         suit.theme.color.normal = {bg = {0, 0, 255}, fg = {255, 0, 0}}
         suit.theme.color.hovered = {bg = {0, 255, 0}, fg = {0, 0, 255}}
         suit.theme.color.active = {bg = {0, 0, 0}, fg = {0, 255, 0}}
+        
         if suit.Button("Status", 0, (heigth / 4) - 70, 70, 70).hit then
-            self.drawStatus(true)
+            status = pet.sendData()
+            if isPressed then
+                isPressed = false
+            else 
+                isPressed = true
+            end
         end
 
         if suit.Button("Comer", 0, ((heigth / 4) * 2) - 70, 70, 70).hit then
@@ -42,6 +43,13 @@ function Interface.New()
         end
     end
     function self.draw()
+        if isPressed then
+            love.graphics.setColor(0, 0, 1)
+            love.graphics.rectangle("fill", 70, (heigth / 4) - 70, 210, 210)
+            love.graphics.setColor(1, 0, 0)
+            love.graphics.print(status.health, 70, (heigth / 4) - 70)
+            love.graphics.setColor(100,180,50)
+        end
         return suit.draw()
     end
 

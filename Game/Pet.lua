@@ -132,6 +132,23 @@ function Pet.New()
         )
     end
 
+    function self.sendData()
+        data = {
+            animation = self.animations.animationDir,
+            happy   = self.happy,
+            growth  = self.growth,
+            health  = self.health,
+            energy  = self.energy,
+            hungry  = self.hungry,
+            thirsty = self.thirsty,
+            smart   = self.smart,
+            weight  = self.weight,
+            state   = self.state,
+            dirty   = self.dirty,
+        }
+        return data
+    end
+
     function self.save(user)
         local data = {
             animation = self.animations.animationDir,
