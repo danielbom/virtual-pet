@@ -106,30 +106,10 @@ function Pet.New()
     function self.displayStatus()
         local width = love.graphics.getWidth() / 2 - 66
         local base = 100
-        local slider = {value = self.happy, min = 0, max = 100}
-        local teste = suit.Slider(slider,100,100, 200,20)
-        teste.hit = nil
-        love.graphics.printf(
-            "happy: "..math.floor(self.happy), width, base, 135, "center"
-        )
-        love.graphics.printf(
-            "growth: "..math.floor(self.growth), width, base + 20, 135, "center"
-        )
-        love.graphics.printf(
-            "health: "..math.floor(self.health), width, base + 40, 135, "center"
-        )
-        love.graphics.printf(
-            "energy: "..math.floor(self.energy), width, base + 60, 135, "center"
-        )
-        love.graphics.printf(
-            "hungry: "..math.floor(self.hungry), width, base + 80, 135, "center"
-        )
-        love.graphics.printf(
-            "thirsty: "..math.floor(self.thirsty), width, base + 100, 135, "center"
-        )
-        love.graphics.printf(
-            "smart: "..math.floor(self.smart), width, base + 120, 135, "center"
-        )
+        --local slider = {value = self.happy, min = 0, max = 100}
+        --local teste = suit.Slider(slider,100,100, 200,20)
+        --teste.hit = nil
+
     end
 
     function self.sendData()
