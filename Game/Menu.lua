@@ -3,7 +3,9 @@ Menu.__index = Menu
 
 local inputs = {
     login = { text = "" },
-    pass = { text = "" }
+    pass = { text = "" },
+    hidden = "",
+    error = 0
 }
 
 local players = {
@@ -14,6 +16,7 @@ local loveWidth = love.graphics.getWidth()
 local loveHeight = love.graphics.getHeight()
 
 function players.load()
+    -- Carrega os dados salvos de um jogador
     local filename = "players.json"
     local file = io.open(filename,"r")
     if file ~= nil then
@@ -24,6 +27,7 @@ function players.load()
 end
 
 function players.save()
+    -- Cria um save para o jogador
     local filename = "players.json"
     local string = Json.stringify(players.data)
     local file = io.open(filename,"w")
@@ -36,9 +40,36 @@ function players.check(user, pass)
 end
 
 function Menu.load()
-    local image = love.graphics.newImage("Imagens/logo.png")
+    -- Definindo o titulo
+    love.window.setTitle("Virtual Pet")
+
+    -- Carregando o background
+    local image = love.graphics
+        .newImage("Imagens/background1.desfocado.jpeg")
     width, height = image:getWidth(), image:getHeight()
     background = {
+        image = image,
+        quad = love.graphics.newQuad( 90, 90,
+            width, height, image:getDimensions()
+        )
+    }
+
+    -- Carregando o model do login
+    local image = love.graphics
+        .newImage("Imagens/MoldeLoginSemBG.png")
+    width, height = image:getWidth(), image:getHeight()
+    moldeLogin = {
+        image = image,
+        quad = love.graphics.newQuad( 0, 0,
+            width, height, image:getDimensions()
+        )
+    }
+
+    -- Carregando a logo
+    local image = love.graphics
+        .newImage("Imagens/logos4.png")
+    width, height = image:getWidth(), image:getHeight()
+    logo = {
         image = image,
         quad = love.graphics.newQuad( 0, 0,
             width, height, image:getDimensions()
@@ -48,13 +79,27 @@ function Menu.load()
 end
 
 function inputs.check()
+    -- Verifica se as entradas são válidas
     return inputs.login.text ~= '' and inputs.pass.text ~= ''
 end
 
+function inputs.clear()
+    -- Limpa as entradas do usuário
+    inputs.login.text = ""
+    inputs.pass.text = ""
+    inputs.hidden = ""
+end
+
 function Menu.update(time)
-    local x = 275
+    -- Criando os botões
+    local x = 290
     local dx = 100
-    local y = 450
+    local y = 400
+    local bg = {255, 255, 225}
+    local black = {0,0,0}
+    suit.theme.color.normal = {bg = bg, fg = black}
+    suit.theme.color.hovered = {bg = bg, fg = {0, 0, 255}}
+    suit.theme.color.active = {bg = bg, fg = {0, 255, 0}}
     local create = suit.Button("Create a pet", x, y, 50, 70)
     local load = suit.Button("Load Game", x + dx, y, 50, 70)
     local quit = suit.Button("Quit", x + dx * 2, y, 50, 70)
@@ -66,6 +111,7 @@ function Menu.update(time)
             user = inputs.login.text
             Router.setState("Game")
         else 
+            inputs.error = inputs.error + 1
             print ("Usuário ou senha inválidos.")
         end
     elseif load.hit then
@@ -73,34 +119,76 @@ function Menu.update(time)
             user = inputs.login.text
             Router.setState("Game")
         else
+            inputs.clear()
+            inputs.error = 1
             print("Usuário ou senha incorretos.")
         end
     elseif quit.hit then
         love.event.quit()
     end
 
-    local x = 320
-    local y = 320
+    -- Criando as caixas de texto
+    local x = 340
+    local y = 290
     local dy = 50
     local login = suit.Input(inputs.login, x, y, 200, 30)
     local pass = suit.Input(inputs.pass, x, y + dy, 200, 30)
-    suit.Label("Pet: ", x - 150, y, 200, 30)
-    suit.Label("Pass: ", x - 150, y + dy, 200, 30)
     
+    -- Verificando se foi digitado enter
     if login.submitted or pass.submitted then
         if players.check(inputs.login.text, inputs.pass.text) then
             user = inputs.login.text
             Router.setState("Game")
         else 
+            inputs.error = inputs.error + 1
             print("Usuário ou senha incorretos.")
         end
+    end
+
+    -- Controle para esconder a senha
+    if inputs.pass.text ~= "" and inputs.pass.text:match("[^*]") then
+        local hidden = inputs.pass.text:gsub("*", "")
+        inputs.hidden = inputs.hidden .. hidden
+        inputs.pass.text = inputs.pass.text:gsub("[^*]", "*")
     end
 end
 
 function Menu.draw()
+    -- Desenhando o background
+    love.graphics.push()
+        love.graphics.translate(0,-70)
+        love.graphics.draw( background.image, background.quad )
+    love.graphics.pop()
+    
+    -- Desenhando a logo
+    love.graphics.push()
+        love.graphics.translate(80,50)
+        love.graphics.draw( logo.image, logo.quad )
+    love.graphics.pop()
+    
+    -- Desenho a caixa de texto de entrada
+    love.graphics.push()
+        love.graphics.translate(0,-105)
+        love.graphics.draw(
+            moldeLogin.image,
+            moldeLogin.quad,
+            220, 300,
+            0, 0.4
+        )
+        local x = 450
+        local y = 400
+        local dy = 50
+        love.graphics.print("Pet: ", x - 150, y)
+        love.graphics.print("Pass: ", x - 150, y + dy)
+
+        if inputs.error ~= 0 then
+            love.graphics.print(
+                "Usuário e senha inválidos (" .. inputs.error .. ")",
+                x - 120, y + 80
+            )
+        end
+    love.graphics.pop()
     suit.draw()
-    love.graphics.translate(100, 100)
-    love.graphics.draw( background.image, background.quads)
 end
 
 function Menu.textinput(t)
@@ -115,5 +203,19 @@ function Menu.mousereleased( x, y, button, isTouch )
     print("release", x, y)
 end
 
+function Menu.keypressed(key)
+    print(key)
+    if key == "delete" then
+        inputs.clear()
+    elseif key == "backspace" then
+        if inputs.login.text ~= "" then
+            inputs.login.text = inputs.login.text:sub(0, -2)
+        elseif inputs.pass.text ~= "" then
+            inputs.hidden = inputs.hidden:sub(0, -2)
+            inputs.pass.text = inputs.pass.text:sub(0, -2)
+            print(inputs.hidden)
+        end
+    end
+end
 
 return Menu
