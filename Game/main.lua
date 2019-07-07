@@ -1,4 +1,8 @@
+-- Global variables
 user = ""
+musics = {
+    main = love.audio.newSource("/Sounds/Ballerina.mp3", "stream")
+}
 
 suit = require("SUIT")
 Json = require("Json")
@@ -12,5 +16,5 @@ function love.load()
     Router
         .add("Menu", Menu)
         .add("Game", Game)
-        .setState("Menu")
+        .setState("Game")
 end

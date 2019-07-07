@@ -40,6 +40,10 @@ function players.check(user, pass)
 end
 
 function Menu.load()
+    musics.main:setLooping(true)
+    musics.main:setVolume(0.5)
+    love.audio.play(musics.main)
+
     -- Definindo o titulo
     love.window.setTitle("Virtual Pet")
 
@@ -95,11 +99,9 @@ function Menu.update(time)
     local x = 290
     local dx = 100
     local y = 400
-    local bg = {255, 255, 225}
-    local black = {0,0,0}
-    suit.theme.color.normal = {bg = bg, fg = black}
-    suit.theme.color.hovered = {bg = bg, fg = {0, 0, 255}}
-    suit.theme.color.active = {bg = bg, fg = {0, 255, 0}}
+    suit.theme.color.normal = {bg = {255, 255, 225}, fg = {0, 0, 0}}
+    suit.theme.color.hovered = {bg = {255, 255, 225}, fg = {0, 0, 255}}
+    suit.theme.color.active = {bg = {255, 255, 225}, fg = {0, 255, 0}}
     local create = suit.Button("Create a pet", x, y, 50, 70)
     local load = suit.Button("Load Game", x + dx, y, 50, 70)
     local quit = suit.Button("Quit", x + dx * 2, y, 50, 70)
@@ -131,11 +133,11 @@ function Menu.update(time)
     local x = 340
     local y = 290
     local dy = 50
-    local login = suit.Input(inputs.login, x, y, 200, 30)
-    local pass = suit.Input(inputs.pass, x, y + dy, 200, 30)
+    inputs.login.obj = suit.Input(inputs.login, x, y, 200, 30)
+    inputs.pass.obj = suit.Input(inputs.pass, x, y + dy, 200, 30)
     
     -- Verificando se foi digitado enter
-    if login.submitted or pass.submitted then
+    if inputs.login.obj.submitted or inputs.pass.obj.submitted then
         if players.check(inputs.login.text, inputs.pass.text) then
             user = inputs.login.text
             Router.setState("Game")
@@ -199,22 +201,9 @@ function Menu.keypressed(key)
     suit.keypressed(key)
 end
 
-function Menu.mousereleased( x, y, button, isTouch )
-    print("release", x, y)
-end
-
 function Menu.keypressed(key)
-    print(key)
-    if key == "delete" then
+    if key == "delete" or key == "backspace" then
         inputs.clear()
-    elseif key == "backspace" then
-        if inputs.login.text ~= "" then
-            inputs.login.text = inputs.login.text:sub(0, -2)
-        elseif inputs.pass.text ~= "" then
-            inputs.hidden = inputs.hidden:sub(0, -2)
-            inputs.pass.text = inputs.pass.text:sub(0, -2)
-            print(inputs.hidden)
-        end
     end
 end
 

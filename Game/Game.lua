@@ -6,8 +6,8 @@ local Interface = require ("Interface")
 local Observable = require("Observable")
 local ManagerAnimations = require("ManagerAnimations")
 
-local t = 0
-local d = 30
+local globalTime = 0
+local savePeriod = 30
 
 Game = {}
 Game.__index = Game
@@ -24,12 +24,16 @@ local function loadUserData()
 end
 
 function Game.load()
+    musics.main:setLooping(true)
+    musics.main:setVolume(0.5)
+    -- love.audio.play(musics.main)
+
     -- Carregando o background
-    local image = love.graphics.newImage("Imagens/background.png")
+    local image = love.graphics.newImage("Imagens/background1-festivo.jpeg")
     width, height = image:getWidth(), image:getHeight()
     background = {
         image = image,
-        quad = love.graphics.newQuad( 0, 0,
+        quad = love.graphics.newQuad( 0, 100,
             width, height, image:getDimensions()
         )
     }
@@ -51,7 +55,8 @@ function Game.load()
     pet = Pet.New()
     pet.animations = ManagerAnimations.New()
         .setScale(3)
-        .toMiddle()
+        .xToMiddle()
+        .setY(340)
         .loadAnimations("/Sprites/Togepi/")
         
     pet.alert = Observable.New()
@@ -62,11 +67,10 @@ function Game.load()
 end
 
 function Game.update(time)
-    -- print(t)
-    t = t + time
-    if t >= d then
+    globalTime = globalTime + time
+    if globalTime >= savePeriod then
         pet.save(user)
-        t = 0
+        globalTime = 0
     end
     -- Atualizando o pet
     pet.update(time)
@@ -84,17 +88,11 @@ function Game.draw()
     love.graphics.draw(canvas.format, canvas.width, canvas.height)
 
     -- Desenhando o background
-    love.graphics.translate(-500, 0)
-    love.graphics.draw( background.image, background.quads)
+    love.graphics.draw( background.image, background.quad)
 
     -- Desenhando o pet
-    love.graphics.translate(500, 0)
-    love.graphics.setColor(255,0,0, 255)
     pet.displayStatus()
-    love.graphics.setColor(100,180,50,255)
-    love.graphics.translate(0, 200)
     pet.animations.display()
-    love.graphics.translate(0, -200)
     energyBar.animations.display()
 
     -- Desenhando os componentes de interface
@@ -115,12 +113,6 @@ function Game.mousereleased( x, y, button, isTouch )
     if x >= 600 and x <= 700 and y >= 250 and y <= 350 then
         print("release", x, y)
         Router.setState("Menu")
-    end
-end
-
-function Game.mousemoved( x, y, dx, dy, istouch )
-    if x >= 600 and x <= 700 and y >= 250 and y <= 350 then
-        -- print("moved", x, y)
     end
 end
 

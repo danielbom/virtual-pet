@@ -1,15 +1,4 @@
-local deadMusic = love.audio.newSource("/Audios/Music/dead.mp3", "stream")
-local sleepMusic = love.audio.newSource("/Audios/Music/sleep.mp3", "stream")
-local mainMusic = love.audio.newSource("/Audios/Music/main.mp3", "stream")
-local gameMusic = love.audio.newSource("/Audios/Music/game.mp3", "stream")
-local healAudio = love.audio.newSource("/Audios/Audios/heal.mp3", "static")
-local winGameAudio = love.audio.newSource("/Audios/Audios/winGame.mp3", "static")
-
 function love.load()
-    --Carregando valores da altura e largura da tela
-    loveWidth = love.graphics.getWidth()
-    loveHeight = love.graphics.getHeight()
-
     --Imagens do Mini-Game
     game_base = love.graphics.newImage("MiniGame/game_base.png")
     game_paper = love.graphics.newImage("MiniGame/game_paper.png")
@@ -28,20 +17,6 @@ function love.load()
     
     --fonte
     fonteName = love.graphics.newFont("Fonte/Roboto-Medium.ttf", 32)
-
-    --audios
-    deadMusic:setLooping(true)
-    deadMusic:setVolume(0.5)
-    sleepMusic:setLooping(true)
-    sleepMusic:setVolume(0.5)
-    mainMusic:setLooping(true)
-    mainMusic:setVolume(0.5)
-    gameMusic:setLooping(true)
-    gameMusic:setVolume(0.5)
-    love.audio.stop(gameMusic)
-    love.audio.stop(deadMusic)
-    love.audio.stop(sleepMusic)
-    love.audio.play(mainMusic)
 
     name = {{0,0,0}, "PIKACHU"}
     deadText = {{0,0,0}, "RESET"} 
@@ -72,86 +47,6 @@ function love.load()
     resultGame = {{0,0,0,}, "----"}
 
     selected = ""    
-
-    carregarDados()
-    --tempo
-    
-    deltatime = os.difftime(os.time(),t1)
-    if deltatime > 0 then
-        petUpdate(deltatime)
-    end
-    if hungryPercent <= 0 or energyPercent <= 0 or happyPercent <= 0 or healthPercent <= 0 then
-        energyPercent = 0
-        happyPercent = 0
-        healthPercent = 0
-        hungryPercent = 0
-    end
-end
-function getAnimation()
-    if animation == animationNormal then
-        return "animationNormal"
-    elseif animation == animationSleep then
-        return "animationSleep"
-    elseif animation == animationBad then
-        return "animationBad"
-    elseif animation == animationSick then
-        return "animationSick"
-    elseif animation == animationTired then
-        return "animationTired"
-    elseif animation == animationVaccione then
-        return getAnimationLast()
-    end
-end
-
-function getAnimationLast()
-    if animationLast == animationNormal then
-        return "animationNormal"
-    elseif animationLast == animationSleep then
-        return "animationSleep"
-    elseif animationLast == animationBad then
-        return "animationBad"
-    elseif animationLast == animationSick then
-        return "animationSick"
-    elseif animationLast == animationTired then
-        return "animationTired"
-    end
-end
-
-function setAnimation(animacao)
-    if animacao == "animationNormal" then
-        return animationNormal
-    elseif animacao == "animationSleep" then
-        return animationSleep
-    elseif animacao == "animationBad" then
-        return animationBad
-    elseif animacao == "animationSick" then
-        return animationSick
-    elseif animacao == "animationTired" then
-        return animationTired
-    end
-end
-
-function petUpdate(dt)
-    if hungryPercent > 0 or energyPercent > 0 or happyPercent > 0 or healthPercent > 0 then
-        if not isSleep then
-            --energy decremento
-            energyPercentFloat = energyPercentFloat - (energyRate * randomFloat(0.8,1.1)) * dt
-            energyPercent = math.floor(energyPercentFloat)
-        else
-            --energy incremento (dormindo)
-            if energyPercent <= 98 then
-                energyPercentFloat = energyPercentFloat + (energyRate * randomFloat(1.1,1.4)) * dt
-                energyPercent = math.floor(energyPercentFloat)
-            else
-                love.audio.stop(sleepMusic)
-                energyPercentFloat = 100
-                isSleep = false
-                UI = UINormal
-                mouseStatus = "normal"
-                animation = animationLast
-            end
-        end
-    end
 end
 
 function love.update(dt)
