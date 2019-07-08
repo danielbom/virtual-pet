@@ -64,7 +64,7 @@ function Animation.New()
 
         self.mode = "file"
     end
-    function self.initFromFile(filename, width, height, duration, steps)
+    function self.initFromFile(filename, width, height, duration)
         self.duration = duration
         self.height = height
         self.width = width

@@ -1,42 +1,37 @@
 
-ManagerAnimation = {}
-ManagerAnimation.__index = ManagerAnimation
+Musics = {}
+Musics.__index = Musics
 
-function ManagerAnimation.New()
-    local self = {
-        musics = {},
-        current = ""
-    }
+Musics.musics = {}
+Musics.current = ""
 
-    function self.add(key, pathname, mode, ...)
-        -- mode: [stream|static]
-        local kargs = {...}
-        local loop = kargs.loop
-        local volume = kargs.volume
-        
-        local music = love.audio.newSource(pathname, mode)
-        music:setLooping(loop == nil and true or loop)
-        music:setVolume(volume == nil and 0.5 or volume)
-        self.musics[key] = music
-        return self
+
+function Musics.add(key, pathname, mode, ...)
+    -- mode: [stream|static]
+    local kargs = {...}
+    local loop = kargs.loop
+    local volume = kargs.volume
+    
+    local music = love.audio.newSource(pathname, mode)
+    music:setLooping(loop == nil and true or loop)
+    music:setVolume(volume == nil and 0.5 or volume)
+    Musics.musics[key] = music
+    return Musics
+end
+
+function Musics.setCurrent(key)
+    Musics.current = key
+    Musics.stopAll()
+    love.audio.play(Musics.musics[key])
+    return Musics
+end
+
+function Musics.stopAll()
+    for key, value in pairs(Musics.musics) do
+        love.audio.stop(Musics.musics[key])
     end
-
-    function self.setCurrent(key)
-        self.current = key
-        self.stopAll()
-        love.audio.play(self.musics[key])
-        return self
-    end
-
-    function self.stopAll()
-        for key, value in pairs(self.musics) do
-            love.audio.stop(self.musics[key])
-        end
-        return self
-    end
-
-    return self
+    return Musics
 end
 
 
-return ManagerAnimation
+return Musics

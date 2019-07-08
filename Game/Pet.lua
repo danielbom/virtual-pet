@@ -112,10 +112,10 @@ function Pet.New()
         self.negate("energy")
         if self.state == "Sleeping" then
             self.state = "Idle"
-            musics.setCurrent("Main")
+            Musics.setCurrent("Main")
         elseif self.state ~= "Denying" then 
             self.state = "Sleeping"
-            musics.setCurrent("Sleep")
+            Musics.setCurrent("Sleep")
         end
         
         return self
@@ -163,8 +163,8 @@ function Pet.New()
     function self.updateState()
         if self.health <= 0 then 
             self.state = "Dead"
-            if musics.current ~= "Dead" then
-                musics.setCurrent("Dead")
+            if Musics.current ~= "Dead" then
+                Musics.setCurrent("Dead")
             end
         elseif self.health < 25 then
             self.state = "Sick"
@@ -174,8 +174,8 @@ function Pet.New()
             self.state = "Idle"
         elseif self.fastStates:match(self.state) then
             pet.animations.setCurrent(self.state)
-        elseif self.state == "Idle" and musics.current ~= "Main" then
-            musics.setCurrent("Main")
+        elseif self.state == "Idle" and Musics.current ~= "Main" then
+            Musics.setCurrent("Main")
         end
     end
 

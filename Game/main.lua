@@ -25,6 +25,7 @@ suit.theme.color.active = {
     fg = {0, 255, 0}}
 
 -- Bibliotecas com dependências de variáveis globais
+TicTacToe = require("TicTacToe")
 Musics = require("ManagerMusics")
 Router = require("Router")
 Game = require("Game")
@@ -35,15 +36,16 @@ function love.load()
     love.window.setTitle("Virtual Pet")
 
     -- Adicionando as musicas
-    musics = Musics.New()
-        .add("Main", "/Sounds/Ballerina.mp3", "stream")
+    Musics.add("Main", "/Sounds/Ballerina.mp3", "stream")
         .add("Menu", "/Sounds/Jigsaw_Puzzle.mp3", "stream")
         .add("Dead", "/Sounds/Flecks_of_Light.mp3", "stream")
         .add("Sleep", "/Sounds/Sleeping_Sheep.mp3", "stream")
+        .add("TicTacToe", "/Sounds/Splashing_Around.mp3", "stream")
 
     -- Definindo as telas do jogo
     Router
         .add("Menu", Menu)
         .add("Game", Game)
-        .setState("Game")
+        .add("TicTacToe", TicTacToe)
+        .setState("TicTacToe")
 end

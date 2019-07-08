@@ -1,3 +1,5 @@
+local Utils = require("Utils")
+
 Menu = {}
 Menu.__index = Menu
 
@@ -40,40 +42,15 @@ function players.check(user, pass)
 end
 
 function Menu.load()
-    musics.setCurrent("Menu")
+    Musics.setCurrent("Menu")
     
     -- Carregando o background
-    local image = love.graphics
-        .newImage("Imagens/background1.desfocado.jpeg")
-    width, height = image:getWidth(), image:getHeight()
-    background = {
-        image = image,
-        quad = love.graphics.newQuad( 90, 90,
-            width, height, image:getDimensions()
-        )
-    }
-
+    background = Utils.loadImage("Imagens/background1.desfocado.jpeg", 50, 100)
     -- Carregando o model do login
-    local image = love.graphics
-        .newImage("Imagens/MoldeLoginSemBG.png")
-    width, height = image:getWidth(), image:getHeight()
-    moldeLogin = {
-        image = image,
-        quad = love.graphics.newQuad( 0, 0,
-            width, height, image:getDimensions()
-        )
-    }
-
+    moldeLogin = Utils.loadImage("Imagens/MoldeLoginSemBG.png")
     -- Carregando a logo
-    local image = love.graphics
-        .newImage("Imagens/logos4.png")
-    width, height = image:getWidth(), image:getHeight()
-    logo = {
-        image = image,
-        quad = love.graphics.newQuad( 0, 0,
-            width, height, image:getDimensions()
-        )
-    }
+    logo = Utils.loadImage("Imagens/logos4.png", -80, -70)
+    
     players.load()
 end
 
@@ -152,16 +129,10 @@ end
 
 function Menu.draw()
     -- Desenhando o background
-    love.graphics.push()
-        love.graphics.translate(0,-70)
-        love.graphics.draw( background.image, background.quad )
-    love.graphics.pop()
+    love.graphics.draw( background.image, background.quad )
     
     -- Desenhando a logo
-    love.graphics.push()
-        love.graphics.translate(80,50)
-        love.graphics.draw( logo.image, logo.quad )
-    love.graphics.pop()
+    love.graphics.draw( logo.image, logo.quad )
     
     -- Desenho a caixa de texto de entrada
     love.graphics.push()

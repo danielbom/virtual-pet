@@ -29,16 +29,6 @@ end
 
 function Game.load()
     musics.setCurrent("Main")
-
-    local image = love.graphics
-        .newImage("Imagens/background1-festivo.jpeg")
-    width, height = image:getWidth(), image:getHeight()
-    background = {
-        image = image,
-        quad = love.graphics.newQuad( 0, 100,
-            width, height, image:getDimensions()
-        )
-    }
     
     -- Carregando o pet
     pet = Pet.New()
@@ -183,10 +173,6 @@ function Game.mousepressed( x, y, button, isTouch )
             pet.animations.setNext("Love")
         end
     end
-end
-
-function Game.mousereleased( x, y, button, isTouch )
-    print("release", x, y)
 end
 
 return Game
