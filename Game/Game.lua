@@ -141,8 +141,6 @@ function Game.update(time)
             os.remove(user.."Data.json")
             Router.setState("Menu")
         end
-
-
     end
 end
 

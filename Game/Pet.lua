@@ -55,7 +55,8 @@ function Pet.New()
         },
 
         last_update = os.time(),
-        animations = nil
+        animations = nil,
+        fastStates = "Born|Denying|Love"
     }
 
     function self.reset()
@@ -134,24 +135,21 @@ function Pet.New()
     end
     
     function self.updateState()
-        if self.health < 25 then
-            self.state = "Sick"
-        elseif self.health <= 0 then 
+        if self.health <= 0 then 
             self.state = "Dead"
+        elseif self.health < 25 then
+            self.state = "Sick"
         elseif self.health > 99 and self.happy > 99 then
             self.state = "Love"
-        elseif self.state == "Denying" then 
-            pet.animations.setCurrent("Denying")
-        elseif self.state:match("Studying") then
-            pet.animations.setCurrent("Studying")
-        else
-            self.state = "Idle"
+        elseif self.fastStates:match(self.state) then
+            pet.animations.setCurrent(self.state)
         end
+        print(self.state)
     end
 
     function self.updateAnimation()
         self.animations.setNext(self.state)
-        if self.state:match("Denying|Love|Born") then
+        if self.fastStates:match(self.state) then
             self.state = "Idle"
         end
     end
