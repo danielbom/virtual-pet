@@ -76,32 +76,49 @@ function Pet.New()
         self.negate("health")
         if self.state ~= "Denying" then 
             self.health = 100
+            self.state = "Idle"
         end
         return self
     end
 
     function self.drink()
-        self.negate("thirsty")
-        if self.state ~= "Denying" then 
-            self.thirsty = 100
+        if self.state ~= "Studying" then
+            self.negate("thirsty")
+            if self.state ~= "Denying" then 
+                self.thirsty = 100
+            end
         end
         return self
     end
 
     function self.eat()
-        self.negate("hungry")
-        if self.state ~= "Denying" then 
-            self.hungry = 100
+        if self.state ~= "Studying" then
+            self.negate("hungry")
+            if self.state ~= "Denying"then 
+                self.hungry = 100
+            end
         end
         return self
     end
 
     function self.study()
-        self.state = "Studying"
+        if self.state == "Idle" and self.energy > 30 then 
+            self.state = self.state == "Studying" and "Idle" or "Studying"
+        end
+        return self
     end
 
     function self.sleep()
-        self.state = "Sleeping"
+        self.negate("energy")
+        if self.state == "Sleeping" then
+            self.state = "Idle"
+            musics.setCurrent("Main")
+        elseif self.state ~= "Denying" then 
+            self.state = "Sleeping"
+            musics.setCurrent("Sleep")
+        end
+        
+        return self
     end
     
     function self.negate(attr)
@@ -119,32 +136,47 @@ function Pet.New()
     end
 
     function self.spendAttr(attr, speed)
-        self[attr] = self[attr] > 0 and self[attr] - (self.rate[attr] * speed) or self[attr]
+        if speed > 0 then
+            self[attr] = self[attr] > 0 and self[attr] - (self.rate[attr] * speed) or 0
+        else
+            self[attr] = self[attr] - (self.rate[attr] * speed)
+        end
     end
 
     function self.updateAttr()
-        local study = self.state ~= "Studying" and 0.3 or -0.3
-        self.spendAttr("growth" ,-0.3)
-        self.spendAttr("happy"  , 0.3)
-        self.spendAttr("health" , 0.3)
-        self.spendAttr("energy" , 0.3)
-        self.spendAttr("hungry" , 0.3)
-        self.spendAttr("thirsty", 0.3)
-        self.spendAttr("smart", study)
-        
+        if self.state ~= "Dead" then
+            local study = self.state ~= "Studying" and 0 or -3
+            local energy = self.state ~= "Sleeping" and 0.3 or -1
+            local health = 0.3 + (self.thirsty - 100)/50 + (100 - self.hungry)/50
+            self.spendAttr("energy", energy)
+            self.spendAttr("smart" , study)
+            self.spendAttr("health", health)
+
+            self.spendAttr("growth" ,-0.3)
+            self.spendAttr("happy"  , 0.3)
+            self.spendAttr("hungry" , 0.3)
+            self.spendAttr("thirsty", 0.3)
+            print(self.state, self.energy, self.health, self.smart)
+        end
     end
     
     function self.updateState()
         if self.health <= 0 then 
             self.state = "Dead"
+            if musics.current ~= "Dead" then
+                musics.setCurrent("Dead")
+            end
         elseif self.health < 25 then
             self.state = "Sick"
         elseif self.health > 99 and self.happy > 99 then
             self.state = "Love"
+        elseif self.state == "Sleeping" and self.energy > 99 then
+            self.state = "Idle"
         elseif self.fastStates:match(self.state) then
             pet.animations.setCurrent(self.state)
+        elseif self.state == "Idle" and musics.current ~= "Main" then
+            musics.setCurrent("Main")
         end
-        print(self.state)
     end
 
     function self.updateAnimation()

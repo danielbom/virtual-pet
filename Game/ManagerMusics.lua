@@ -4,7 +4,8 @@ ManagerAnimation.__index = ManagerAnimation
 
 function ManagerAnimation.New()
     local self = {
-        musics = {}
+        musics = {},
+        current = ""
     }
 
     function self.add(key, pathname, mode, ...)
@@ -21,6 +22,7 @@ function ManagerAnimation.New()
     end
 
     function self.setCurrent(key)
+        self.current = key
         self.stopAll()
         love.audio.play(self.musics[key])
         return self

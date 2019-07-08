@@ -5,6 +5,7 @@ local SmartBar = require("SmartBar")
 local EnergyBar = require("EnergyBar")
 local HungryBar = require("HungryBar")
 local ThirstyBar = require("ThirstyBar")
+local Background = require("Background")
 
 local Observable = require("Observable")
 local ManagerAnimations = require("ManagerAnimations")
@@ -13,7 +14,7 @@ Game = {}
 Game.__index = Game
 
 local globalTime = 0
-local savePeriod = 30
+local savePeriod = 10
 
 local function loadUserData()
     -- Carregando os dados usuário
@@ -29,7 +30,6 @@ end
 function Game.load()
     musics.setCurrent("Main")
 
-    -- Carregando o background
     local image = love.graphics
         .newImage("Imagens/background1-festivo.jpeg")
     width, height = image:getWidth(), image:getHeight()
@@ -68,10 +68,17 @@ function Game.load()
         .loadAnimations("/Sprites/SmartBar/")
         .setCurrent("Noob")
     
+    -- Carregando a barra de sede
     thirstyBar = ThirstyBar.New()
     thirstyBar.animations = ManagerAnimations.New()
         .setX(x + dx * 4).setY(y).setScale(0.5)
         .loadAnimations("/Sprites/ThirstyBar/")
+    
+    -- Carregando o background
+    background = Background.New()
+    background.animations = ManagerAnimations.New()
+        .setX(-50).setY(-100).setScale(1)
+        .loadAnimations("/Sprites/Background/")
 
     -- Registrando observadores
     pet.alert = Observable.New()
@@ -79,6 +86,7 @@ function Game.load()
     pet.alert.register(energyBar, energyBar.update)
     pet.alert.register(hungryBar, hungryBar.update)
     pet.alert.register(thirstyBar, thirstyBar.update)
+    pet.alert.register(background, background.update)
 
     -- Carregando dados do usuário
     loadUserData()
@@ -105,6 +113,8 @@ function Game.update(time)
     smartBar.animations.update(time)
     -- Atualizando a barra de sede
     thirstyBar.animations.update(time)
+    -- Atualizando o background
+    background.animations.update(time)
     
     -- Botões
     local x = 180
@@ -149,7 +159,7 @@ function Game.draw()
     love.graphics.draw(canvas.format, canvas.width, canvas.height)
 
     -- Desenhando o background
-    love.graphics.draw( background.image, background.quad)
+    background.animations.display()
 
     -- Desenhando o pet
     pet.animations.display()
@@ -170,7 +180,7 @@ function Game.mousepressed( x, y, button, isTouch )
     -- Se estou clicando no pet
     if x >= 370 and x <= 430 and y >= 380 and y <= 460 then
         if pet.state == "Idle" then
-            pet.animations.setCurrent("Love")
+            pet.animations.setNext("Love")
         end
     end
 end

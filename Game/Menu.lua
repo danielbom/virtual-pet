@@ -102,8 +102,8 @@ function Menu.update(time)
     local quit = suit.Button("Quit", x + dx * 2, y, 50, 70)
     
     if create.hit then
-        if inputs.check() then
-            players.data[inputs.login.text] = inputs.pass.text
+        if inputs.check() and not players.data[user] then
+            players.data[inputs.login.text] = inputs.hidden
             players.save()
             user = inputs.login.text
             Router.setState("Game")
@@ -112,12 +112,12 @@ function Menu.update(time)
             print ("Usuário ou senha inválidos.")
         end
     elseif load.hit then
-        if inputs.check() and players.check(inputs.login.text, inputs.pass.text) then
+        if inputs.check() and players.check(inputs.login.text, inputs.hidden) then
             user = inputs.login.text
             Router.setState("Game")
         else
             inputs.clear()
-            inputs.error = 1
+            inputs.error = inputs.error + 1
             print("Usuário ou senha incorretos.")
         end
     elseif quit.hit then

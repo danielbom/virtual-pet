@@ -38,6 +38,7 @@ function love.load()
     musics = Musics.New()
         .add("Main", "/Sounds/Ballerina.mp3", "stream")
         .add("Menu", "/Sounds/Jigsaw_Puzzle.mp3", "stream")
+        .add("Dead", "/Sounds/Flecks_of_Light.mp3", "stream")
         .add("Sleep", "/Sounds/Sleeping_Sheep.mp3", "stream")
 
     -- Definindo as telas do jogo

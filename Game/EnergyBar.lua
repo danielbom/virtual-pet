@@ -19,7 +19,7 @@ function EnergyBar.New()
             Low     : [ 15-5 ]
             Empty   : [  5-0 ]
         --]]
-        if pet.energy >= 90 then
+        if pet.energy >= 95 then
             self.animations.setNext("Complete")
         elseif pet.energy >= 80 then
             self.animations.setNext("Full")
