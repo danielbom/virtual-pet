@@ -1,0 +1,5 @@
+Noob 1 1
+Novice 1 1
+Intermediate 1 1
+Hard 1 1
+Expert 1 1

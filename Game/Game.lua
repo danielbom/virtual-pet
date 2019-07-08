@@ -1,5 +1,6 @@
 local Pet = require("Pet")
 local Utils = require("Utils")
+local SmartBar = require("SmartBar")
 local EnergyBar = require("EnergyBar")
 local HungryBar = require("HungryBar")
 local Animation = require("Animation")
@@ -45,20 +46,31 @@ function Game.load()
         .setY(340)
         .loadAnimations("/Sprites/Togepi/")
 
+    local x = 100
+    local dx = 100
+    local y = 0
     -- Carregando a barra de energia
     energyBar = EnergyBar.New()
     energyBar.animations = ManagerAnimations.New()
-        .setX(100).setY(0)
+        .setX(x + dx * 1).setY(y)
         .loadAnimations("/Sprites/EnergyBar/")
 
     -- Carregando a barra de fome
     hungryBar = HungryBar.New()
     hungryBar.animations = ManagerAnimations.New()
-        .setX(200).setY(0).setScale(0.23)
+        .setX(x + dx * 2).setY(y).setScale(0.23)
         .loadAnimations("/Sprites/HungryBar/")
+    
+    -- Carregando a barra de inteligencia
+    smartBar = SmartBar.New()
+    smartBar.animations = ManagerAnimations.New()
+        .setX(x + dx * 3).setY(y).setScale(0.5)
+        .loadAnimations("/Sprites/SmartBar/")
+        .setCurrent("Noob")
     
     -- Registrando observadores
     pet.alert = Observable.New()
+    pet.alert.register(smartBar, smartBar.update)
     pet.alert.register(energyBar, energyBar.update)
     pet.alert.register(hungryBar, hungryBar.update)
 
@@ -82,6 +94,8 @@ function Game.update(time)
     energyBar.animations.update(time)
     -- Atualizando a barra de fome
     hungryBar.animations.update(time)
+    -- Atualizando a barra de inteligencia
+    smartBar.animations.update(time)
     
     -- Botões
     local x = 180
@@ -108,6 +122,9 @@ function Game.draw()
     -- Desenhando o pet
     pet.displayStatus()
     pet.animations.display()
+
+    -- Desenhando a barra de status
+    smartBar.animations.display()
     energyBar.animations.display()
     hungryBar.animations.display()
 

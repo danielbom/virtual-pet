@@ -34,10 +34,10 @@ function Pet.New()
         happy   = 50,
         growth  = 0,
         health  = 100,
-        energy  = 100,
-        hungry  = 100,
+        energy  = 100,  -- Ok
+        hungry  = 100,  -- Ok
         thirsty = 100,
-        smart   = 50,
+        smart   = 0,    -- Ok
         
         weight  = 1,
         state  = "Idle",
@@ -65,7 +65,7 @@ function Pet.New()
     end
 
     function self.spendAttr(attr, speed)
-        self[attr] = self[attr] - (self.rate[attr] * speed)
+        self[attr] = self[attr] > 0 and self[attr] - (self.rate[attr] * speed) or self[attr]
     end
 
     function self.updateAttr()
@@ -75,6 +75,9 @@ function Pet.New()
         self.spendAttr("energy" , 0.3)
         self.spendAttr("hungry" , 0.3)
         self.spendAttr("thirsty", 0.3)
+        if self.state ~= "Studying" then 
+            self.spendAttr("smart", 0.3)
+        end
     end
     
     function self.updateState()
