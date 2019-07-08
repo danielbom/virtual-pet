@@ -91,7 +91,7 @@ function Pet.New()
 
     function self.updateAnimation()
         self.animations.setNext(self.state)
-        if self.state == "Denying" then
+        if self.state:match("Denying|Love") then
             self.state = "Idle"
         end
     end

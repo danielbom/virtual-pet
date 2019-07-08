@@ -40,13 +40,8 @@ function players.check(user, pass)
 end
 
 function Menu.load()
-    musics.main:setLooping(true)
-    musics.main:setVolume(0.5)
     love.audio.play(musics.main)
-
-    -- Definindo o titulo
-    love.window.setTitle("Virtual Pet")
-
+    
     -- Carregando o background
     local image = love.graphics
         .newImage("Imagens/background1.desfocado.jpeg")
