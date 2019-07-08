@@ -1,9 +1,11 @@
 local Pet = require("Pet")
 local Utils = require("Utils")
+
 local SmartBar = require("SmartBar")
 local EnergyBar = require("EnergyBar")
 local HungryBar = require("HungryBar")
-local Animation = require("Animation")
+local ThirstyBar = require("ThirstyBar")
+
 local Observable = require("Observable")
 local ManagerAnimations = require("ManagerAnimations")
 
@@ -68,11 +70,17 @@ function Game.load()
         .loadAnimations("/Sprites/SmartBar/")
         .setCurrent("Noob")
     
+    thirstyBar = ThirstyBar.New()
+    thirstyBar.animations = ManagerAnimations.New()
+        .setX(x + dx * 4).setY(y).setScale(0.5)
+        .loadAnimations("/Sprites/ThirstyBar/")
+
     -- Registrando observadores
     pet.alert = Observable.New()
     pet.alert.register(smartBar, smartBar.update)
     pet.alert.register(energyBar, energyBar.update)
     pet.alert.register(hungryBar, hungryBar.update)
+    pet.alert.register(thirstyBar, thirstyBar.update)
 
     loadUserData()
     pet.animations.setCurrent(pet.state)
@@ -96,6 +104,8 @@ function Game.update(time)
     hungryBar.animations.update(time)
     -- Atualizando a barra de inteligencia
     smartBar.animations.update(time)
+    -- Atualizando a barra de sede
+    thirstyBar.animations.update(time)
     
     -- Botões
     local x = 180
@@ -127,6 +137,7 @@ function Game.draw()
     smartBar.animations.display()
     energyBar.animations.display()
     hungryBar.animations.display()
+    thirstyBar.animations.display()
 
     -- Desenhando os componentes de interface
     suit.draw()
