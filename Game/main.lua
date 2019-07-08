@@ -5,16 +5,6 @@ Json = require("Json")
 -- Variáveis globais
 user = ""
 
--- Musicas
-musics = {
-    main = love.audio.newSource("/Sounds/Ballerina.mp3", "stream"),
-    menu = love.audio.newSource("/Sounds/Jigsaw_Puzzle.mp3", "stream")
-}
-musics.main:setLooping(true)
-musics.main:setVolume(0.5)
-musics.menu:setLooping(true)
-musics.menu:setVolume(0.5)
-
 -- Janela
 canvas = {
     width = love.graphics.getWidth(),
@@ -35,14 +25,20 @@ suit.theme.color.active = {
     fg = {0, 255, 0}}
 
 -- Bibliotecas com dependências de variáveis globais
+Musics = require("ManagerMusics")
 Router = require("Router")
 Game = require("Game")
 Menu = require("Menu")
 
-
 function love.load()
     -- Definindo o titulo
     love.window.setTitle("Virtual Pet")
+
+    -- Adicionando as musicas
+    musics = Musics.New()
+        .add("Main", "/Sounds/Ballerina.mp3", "stream")
+        .add("Menu", "/Sounds/Jigsaw_Puzzle.mp3", "stream")
+        .add("Sleep", "/Sounds/Sleeping_Sheep.mp3", "stream")
 
     -- Definindo as telas do jogo
     Router

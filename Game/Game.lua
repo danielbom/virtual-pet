@@ -27,7 +27,7 @@ local function loadUserData()
 end
 
 function Game.load()
-    love.audio.play(musics.main)
+    musics.setCurrent("Main")
 
     -- Carregando o background
     local image = love.graphics
