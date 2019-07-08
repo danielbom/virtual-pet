@@ -5,16 +5,6 @@ function love.load()
     game_rock = love.graphics.newImage("MiniGame/game_rock.png")
     game_scissors = love.graphics.newImage("MiniGame/game_scissors.png")
 
-    --Inicializando Interface gráfica
-    UINormal = love.graphics.newImage("UI/UIIconsActions.png");
-    UIHungry =love.graphics.newImage("UI/UIHungrySelected.png");
-    UIHealth = love.graphics.newImage("UI/UIHealthCareSelected.png");
-    UISleep = love.graphics.newImage("UI/UISleepSelected.png");
-    UIGame = love.graphics.newImage("UI/UIGameSelected.png");
-    UIToilet = love.graphics.newImage("UI/UIToiletSelected.png");
-    UIGameOver = love.graphics.newImage("UI/UIIcons.png");
-    UI = UINormal
-    
     --fonte
     fonteName = love.graphics.newFont("Fonte/Roboto-Medium.ttf", 32)
 

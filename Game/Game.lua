@@ -27,7 +27,7 @@ local function loadUserData()
 end
 
 function Game.load()
-    -- love.audio.play(musics.main)
+    love.audio.play(musics.main)
 
     -- Carregando o background
     local image = love.graphics
@@ -43,9 +43,7 @@ function Game.load()
     -- Carregando o pet
     pet = Pet.New()
     pet.animations = ManagerAnimations.New()
-        .setScale(3)
-        .xToMiddle()
-        .setY(340)
+        .xToMiddle().setY(340).setScale(3)
         .loadAnimations("/Sprites/Togepi/")
 
     local x = 100
@@ -113,13 +111,38 @@ function Game.update(time)
     local dx = 70
     local y = 515
     if pet.state ~= "Dead" then 
-        suit.Button("Comer",   x + dx*1, y, 60, 60)
-        suit.Button("Beber",   x + dx*2, y, 60, 60)
-        suit.Button("Estudar", x + dx*3, y, 60, 60)
-        suit.Button("Curar",   x + dx*4, y, 60, 60)
-        suit.Button("Dormir",  x + dx*5, y, 60, 60)
+        
+        local eat = suit.Button("Comer",   x + dx*1, y, 60, 60)
+        local heal = suit.Button("Curar",   x + dx*4, y, 60, 60)
+        local drink = suit.Button("Beber",   x + dx*2, y, 60, 60)
+        local study = suit.Button("Estudar", x + dx*3, y, 60, 60)
+        local sleep = suit.Button("Dormir",  x + dx*5, y, 60, 60)
+
+        if eat.hit then
+            pet.eat()
+        elseif heal.hit then
+            pet.heal()
+        elseif drink.hit then
+            pet.drink()
+        elseif study.hit then
+            pet.study()
+        elseif sleep.hit then
+            pet.sleep()
+        end
+
     else
-        suit.Button("Reiniciar", x + dx*3, y, 60, 60)
+        local reload = suit.Button("Reiniciar", x + dx*2, y, 60, 60)
+        local exit = suit.Button("Sair", x + dx*4, y, 60, 60)
+
+        if reload.hit then
+            pet.reset()
+            pet.save(user)
+        elseif exit.hit then
+            os.remove(user.."Data.json")
+            Router.setState("Menu")
+        end
+
+
     end
 end
 
@@ -131,7 +154,6 @@ function Game.draw()
     love.graphics.draw( background.image, background.quad)
 
     -- Desenhando o pet
-    pet.displayStatus()
     pet.animations.display()
 
     -- Desenhando a barra de status
@@ -147,16 +169,16 @@ end
 
 function Game.mousepressed( x, y, button, isTouch )
     print("press", x, y)
-end
-
-function Game.mousereleased( x, y, button, isTouch )
-    print("release", x, y)
     -- Se estou clicando no pet
     if x >= 370 and x <= 430 and y >= 380 and y <= 460 then
         if pet.state == "Idle" then
             pet.animations.setCurrent("Love")
         end
     end
+end
+
+function Game.mousereleased( x, y, button, isTouch )
+    print("release", x, y)
 end
 
 return Game
