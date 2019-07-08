@@ -82,6 +82,7 @@ function Game.load()
     pet.alert.register(hungryBar, hungryBar.update)
     pet.alert.register(thirstyBar, thirstyBar.update)
 
+    -- Carregando dados do usuário
     loadUserData()
     pet.animations.setCurrent(pet.state)
 end

@@ -7,10 +7,13 @@ user = ""
 
 -- Musicas
 musics = {
-    main = love.audio.newSource("/Sounds/Ballerina.mp3", "stream")
+    main = love.audio.newSource("/Sounds/Ballerina.mp3", "stream"),
+    menu = love.audio.newSource("/Sounds/Jigsaw_Puzzle.mp3", "stream")
 }
 musics.main:setLooping(true)
 musics.main:setVolume(0.5)
+musics.menu:setLooping(true)
+musics.menu:setVolume(0.5)
 
 -- Janela
 canvas = {

@@ -17,13 +17,13 @@ function ThirstyBar.New()
             25 : [ 35-5]
             0  : [ 5-0]
         --]]
-        if pet.smart >= 90 then
+        if pet.thirsty >= 90 then
             self.animations.setNext("95")
-        elseif pet.smart >= 65 then
+        elseif pet.thirsty >= 65 then
             self.animations.setNext("70")
-        elseif pet.smart >= 35 then
+        elseif pet.thirsty >= 35 then
             self.animations.setNext("45")
-        elseif pet.smart >= 5 then
+        elseif pet.thirsty >= 5 then
             self.animations.setNext("25")
         else 
             self.animations.setNext("0")

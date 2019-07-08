@@ -8,7 +8,6 @@ function Router.add(name, obj)
 end
 
 function Router.setState(name)
-    print("State: ", name)
     Router[name].load()
     love.update = Router[name].update
     love.draw = Router[name].draw

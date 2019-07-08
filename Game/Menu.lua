@@ -40,7 +40,7 @@ function players.check(user, pass)
 end
 
 function Menu.load()
-    love.audio.play(musics.main)
+    love.audio.play(musics.menu)
     
     -- Carregando o background
     local image = love.graphics
