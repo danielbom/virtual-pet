@@ -77,55 +77,62 @@ function Pet.New()
         if self.state ~= "Denying" then 
             self.health = 100
             self.state = "Idle"
+            return true
         end
-        return self
+        return false
     end
 
     function self.drink()
-        if self.state ~= "Studying" then
-            self.negate("thirsty")
-            if self.state ~= "Denying" then 
-                self.thirsty = 100
-            end
+        self.negate("thirsty")
+        if self.state ~= "Denying" then 
+            self.thirsty = 100
+            return true
         end
-        return self
+        return false
     end
 
     function self.eat()
-        if self.state ~= "Studying" then
-            self.negate("hungry")
-            if self.state ~= "Denying"then 
-                self.hungry = 100
-            end
+        self.negate("hungry")
+        if self.state ~= "Denying"then 
+            self.hungry = 100
+            return true
         end
-        return self
+        return false
     end
 
     function self.study()
-        if self.state == "Idle" and self.energy > 30 then 
-            self.state = self.state == "Studying" and "Idle" or "Studying"
+        if self.state == "Idle" and self.energy > 30 then
+            self.state = "Studying"
+            return true
+        elseif self.state == "Studying" then
+            self.state = "Idle"
         end
-        return self
+        return false
     end
 
     function self.sleep()
         self.negate("energy")
         if self.state == "Sleeping" then
             self.state = "Idle"
-            Musics.setCurrent("Main")
-        elseif self.state ~= "Denying" then 
+        elseif self.state == "Idle" then 
             self.state = "Sleeping"
-            Musics.setCurrent("Sleep")
+            return true
         end
-        
-        return self
+        return false
+    end
+
+    function self.play()
+        if self.state == "Idle" and self.energy > 40 then
+            self.happy = 100
+            return true
+        end
+        return false
     end
     
     function self.negate(attr)
         if self[attr] > 90 then
             self.state = "Denying"
         end
-        return self
     end
 
     function self.init(kargs)
@@ -153,30 +160,33 @@ function Pet.New()
             self.spendAttr("health", health)
 
             self.spendAttr("growth" ,-0.3)
-            self.spendAttr("happy"  , 0.3)
+            self.spendAttr("happy"  , 0.5)
             self.spendAttr("hungry" , 0.3)
             self.spendAttr("thirsty", 0.3)
-            print(self.state, self.energy, self.health, self.smart)
         end
     end
     
     function self.updateState()
+        if self.fastStates:match(self.state) then
+            pet.animations.setCurrent(self.state)
+        end
+
         if self.health <= 0 then 
             self.state = "Dead"
-            if Musics.current ~= "Dead" then
-                Musics.setCurrent("Dead")
-            end
         elseif self.health < 25 then
             self.state = "Sick"
-        elseif self.health > 99 and self.happy > 99 then
-            self.state = "Love"
-        elseif self.state == "Sleeping" and self.energy > 99 then
+        elseif self.energy >= 100 then
             self.state = "Idle"
-        elseif self.fastStates:match(self.state) then
-            pet.animations.setCurrent(self.state)
-        elseif self.state == "Idle" and Musics.current ~= "Main" then
-            Musics.setCurrent("Main")
         end
+
+        if (self.state == "Idle" or self.state == "Sick") and Musics.current ~= "Main" then
+            Musics.setCurrent("Main")
+        elseif self.state == "Sleeping" and Musics.current ~= "Sleep" then
+            Musics.setCurrent("Sleep")
+        elseif self.state == "Dead" and Musics.current ~= "Dead" then
+            Musics.setCurrent("Dead")
+        end
+
     end
 
     function self.updateAnimation()
@@ -211,21 +221,8 @@ function Pet.New()
     end
 
     function self.save(user)
-        local data = {
-            animation = self.animations.animationDir,
-            happy   = self.happy,
-            growth  = self.growth,
-            health  = self.health,
-            energy  = self.energy,
-            hungry  = self.hungry,
-            thirsty = self.thirsty,
-            smart   = self.smart,
-            weight  = self.weight,
-            state   = self.state,
-            dirty   = self.dirty,
-        }
         local filename = user.."Data.json"
-        local string = Json.stringify(data)
+        local string = Json.stringify(self.sendData())
         local file = io.open(filename,"w")
         file:write(string)
         file:close()
