@@ -17,25 +17,36 @@ function createMatrix()
     end
     
     function matrix.check()
-        local counter = {{}, {}, {}}
-        local d1 = matrix[1][1]
-        local d2 = matrix[2][2]
-        local winner = nil
+        local counterl = {{}, {}, {}}
+        local counterc = {{}, {}, {}}
+        local w = nil
         for i = 1, 3 do
             for j = 1, 3 do
                 if matrix[i][j] then
-                    local c = counter[i][matrix[i][j]]
-                    counter[i][matrix[i][j]] = c ~= nil and c + 1 or 1
-                    if winner == nil and counter[i][matrix[i][j]] == 3 then
-                        winner = matrix[i][j]
+                    local c = counterc[i][matrix[i][j]]
+                    counterc[i][matrix[i][j]] = c ~= nil and c + 1 or 1
+                    if w == nil and counterc[i][matrix[i][j]] == 3 then
+                        w = matrix[i][j]
+                    end
+                end
+                if matrix[j][i] then
+                    local c = counterl[i][matrix[j][i]]
+                    counterl[i][matrix[j][i]] = c ~= nil and c + 1 or 1
+                    if w == nil and counterl[i][matrix[j][i]] == 3 then
+                        w = matrix[j][i]
                     end
                 end
             end
-            d1 = matrix[i][i] == d1 and d1 or nil
-            d2 = matrix[i][4-i] == d2 and d2 or nil
         end
-        return winner or d1 or d2 or nil
+        if w ~= nil then return w end
+        if matrix[1][1] == matrix[2][2] and matrix[2][2] == matrix[3][3] then
+            return matrix[1][1]
+        elseif matrix[1][3] == matrix[2][2] and matrix[2][2] == matrix[3][1] then
+            return matrix[1][3]
+        end
+        return nil
     end
+
 
     function matrix.full()
         return matrix.filled == 9
@@ -70,6 +81,20 @@ end
 function TicTacToe.update(time)
     winner = matrix.check()
     print((winner == O and "O") or (winner == X and "X") or "NO")
+
+    local x = 650
+    local y = 320
+    local dy = 100
+    local again = suit.Button("Jogar novamente", x, y, 80, 70)
+    local exit = suit.Button("Sair", x, y + dy, 80, 70)
+
+    if again.hit then
+        matrix = createMatrix()
+        current = winner ~= nil and winner.next or O
+        winner = nil
+    elseif exit.hit then
+        Router.setState("Game")
+    end
 end
 
 function TicTacToe.draw()
@@ -85,6 +110,7 @@ function TicTacToe.draw()
             end
         end
     end
+    suit.draw()
 end
 
 
