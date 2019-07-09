@@ -28,7 +28,7 @@ local function loadUserData()
 end
 
 function Game.load()
-    musics.setCurrent("Main")
+    Musics.setCurrent("Main")
     
     -- Carregando o pet
     pet = Pet.New()
@@ -107,32 +107,30 @@ function Game.update(time)
     background.animations.update(time)
     
     -- Botões
-    local x = 180
+    local x = 120
     local dx = 70
     local y = 515
     if pet.state ~= "Dead" then 
-        
-        local eat = suit.Button("Comer",   x + dx*1, y, 60, 60)
-        local heal = suit.Button("Curar",   x + dx*4, y, 60, 60)
-        local drink = suit.Button("Beber",   x + dx*2, y, 60, 60)
-        local study = suit.Button("Estudar", x + dx*3, y, 60, 60)
-        local sleep = suit.Button("Dormir",  x + dx*5, y, 60, 60)
+        local sleep = suit.Button("Dormir",  x + dx*1, y, 60, 60)
+        local heal  = suit.Button("Curar",   x + dx*2, y, 60, 60)
+        local play  = suit.Button("Jogar",   x + dx*3, y, 60, 60)
+        local study = suit.Button("Estudar", x + dx*4, y, 60, 60)
+        local eat   = suit.Button("Comer",   x + dx*5, y, 60, 60)
+        local drink = suit.Button("Beber",   x + dx*6, y, 60, 60)
 
-        if eat.hit then
-            pet.eat()
-        elseif heal.hit then
-            pet.heal()
-        elseif drink.hit then
-            pet.drink()
-        elseif study.hit then
-            pet.study()
-        elseif sleep.hit then
-            pet.sleep()
+        if     eat.hit   then pet.eat()
+        elseif heal.hit  then pet.heal()
+        elseif drink.hit then pet.drink()
+        elseif study.hit then pet.study()
+        elseif sleep.hit then pet.sleep()
+        elseif play.hit and pet.play() then
+            pet.save(user)
+            Router.setState("TicTacToe")
         end
 
     else
         local reload = suit.Button("Reiniciar", x + dx*2, y, 60, 60)
-        local exit = suit.Button("Sair", x + dx*4, y, 60, 60)
+        local exit   = suit.Button("Sair",      x + dx*4, y, 60, 60)
 
         if reload.hit then
             pet.reset()
@@ -170,7 +168,7 @@ function Game.mousepressed( x, y, button, isTouch )
     -- Se estou clicando no pet
     if x >= 370 and x <= 430 and y >= 380 and y <= 460 then
         if pet.state == "Idle" then
-            pet.animations.setNext("Love")
+            pet.state = "Love"
         end
     end
 end

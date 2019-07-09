@@ -47,7 +47,7 @@ function Menu.load()
     -- Carregando o background
     background = Utils.loadImage("Imagens/background1.desfocado.jpeg", 50, 100)
     -- Carregando o model do login
-    moldeLogin = Utils.loadImage("Imagens/MoldeLoginSemBG.png")
+    moldeLogin = Utils.loadImage("Imagens/MoldeLoginTogepi.png")
     -- Carregando a logo
     logo = Utils.loadImage("Imagens/logos4.png", -80, -70)
     
@@ -102,7 +102,7 @@ function Menu.update(time)
     end
 
     -- Criando as caixas de texto
-    local x = 340
+    local x = 330
     local y = 290
     local dy = 50
     inputs.login.obj = suit.Input(inputs.login, x, y, 200, 30)
@@ -143,7 +143,7 @@ function Menu.draw()
             220, 300,
             0, 0.4
         )
-        local x = 450
+        local x = 430
         local y = 400
         local dy = 50
         love.graphics.print("Pet: ", x - 150, y)
