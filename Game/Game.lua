@@ -4,6 +4,7 @@ local Utils = require("Utils")
 local SmartBar = require("SmartBar")
 local EnergyBar = require("EnergyBar")
 local HungryBar = require("HungryBar")
+local HealthBar = require("HealthBar")
 local ThirstyBar = require("ThirstyBar")
 local Background = require("Background")
 
@@ -13,17 +14,17 @@ local ManagerAnimations = require("ManagerAnimations")
 Game = {}
 Game.__index = Game
 
-local globalTime = 0
-local savePeriod = 10
+local globalTime, savePeriod = 0, 10
 
 local function loadUserData()
     -- Carregando os dados usuário
-    local file = io.open(user.."Data.json", "r")
+    local filename = user.file()
+    local file = io.open(filename, "r")
     if file then
-        pet.load(user)
+        pet.load(filename)
         file.close()
     else
-        pet.save(user)
+        pet.save(filename)
     end
 end
 
@@ -36,33 +37,36 @@ function Game.load()
         .xToMiddle().setY(340).setScale(3)
         .loadAnimations("/Sprites/Togepi/")
 
-    local x = 100
-    local dx = 100
-    local y = 0
+    local x,dx,y = 60,100,2
     -- Carregando a barra de energia
     energyBar = EnergyBar.New()
     energyBar.animations = ManagerAnimations.New()
-        .setX(x + dx * 1).setY(y)
+        .setX(x + dx * 1).setY(y).setScale(0.9)
         .loadAnimations("/Sprites/EnergyBar/")
 
     -- Carregando a barra de fome
     hungryBar = HungryBar.New()
     hungryBar.animations = ManagerAnimations.New()
-        .setX(x + dx * 2).setY(y).setScale(0.23)
+        .setX(x + dx * 2).setY(y).setScale(0.21)
         .loadAnimations("/Sprites/HungryBar/")
     
     -- Carregando a barra de inteligencia
     smartBar = SmartBar.New()
     smartBar.animations = ManagerAnimations.New()
-        .setX(x + dx * 3).setY(y).setScale(0.5)
+        .setX(x + dx * 3).setY(y).setScale(0.45)
         .loadAnimations("/Sprites/SmartBar/")
         .setCurrent("Noob")
     
     -- Carregando a barra de sede
     thirstyBar = ThirstyBar.New()
     thirstyBar.animations = ManagerAnimations.New()
-        .setX(x + dx * 4).setY(y).setScale(0.5)
+        .setX(x + dx * 4).setY(y).setScale(0.45)
         .loadAnimations("/Sprites/ThirstyBar/")
+
+    hearthBar = HealthBar.New()
+    hearthBar.animations = ManagerAnimations.New()
+        .setX(x + dx * 5).setY(y).setScale(1)
+        .loadAnimations("/Sprites/HealthBar/")
     
     -- Carregando o background
     background = Background.New()
@@ -75,6 +79,7 @@ function Game.load()
     pet.alert.register(smartBar, smartBar.update)
     pet.alert.register(energyBar, energyBar.update)
     pet.alert.register(hungryBar, hungryBar.update)
+    pet.alert.register(hearthBar, hearthBar.update)
     pet.alert.register(thirstyBar, thirstyBar.update)
     pet.alert.register(background, background.update)
 
@@ -95,21 +100,18 @@ function Game.update(time)
     pet.update(time)
     pet.alert.notify(pet)
     
-    -- Atualizando a barra de energia
-    energyBar.animations.update(time)
-    -- Atualizando a barra de fome
-    hungryBar.animations.update(time)
-    -- Atualizando a barra de inteligencia
+    -- Atualizando a barra de status
     smartBar.animations.update(time)
-    -- Atualizando a barra de sede
+    energyBar.animations.update(time)
+    hungryBar.animations.update(time)
+    hearthBar.animations.update(time)
     thirstyBar.animations.update(time)
+
     -- Atualizando o background
     background.animations.update(time)
     
     -- Botões
-    local x = 120
-    local dx = 70
-    local y = 515
+    local x,dx,y = 120,70,515
     if pet.state ~= "Dead" then 
         local sleep = suit.Button("Dormir",  x + dx*1, y, 60, 60)
         local heal  = suit.Button("Curar",   x + dx*2, y, 60, 60)
@@ -129,7 +131,7 @@ function Game.update(time)
         end
 
     else
-        local reload = suit.Button("Reiniciar", x + dx*2, y, 60, 60)
+        local reload = suit.Button("Reiniciar", x + dx*3, y, 60, 60)
         local exit   = suit.Button("Sair",      x + dx*4, y, 60, 60)
 
         if reload.hit then
@@ -156,6 +158,7 @@ function Game.draw()
     smartBar.animations.display()
     energyBar.animations.display()
     hungryBar.animations.display()
+    hearthBar.animations.display()
     thirstyBar.animations.display()
 
     -- Desenhando os componentes de interface

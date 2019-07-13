@@ -11,7 +11,8 @@ local inputs = {
 }
 
 local players = {
-    data = {}
+    data = {},
+    file = "Data/players.json"
 }
 
 local loveWidth = love.graphics.getWidth()
@@ -19,9 +20,8 @@ local loveHeight = love.graphics.getHeight()
 
 function players.load()
     -- Carrega os dados salvos de um jogador
-    local filename = "players.json"
-    local file = io.open(filename,"r")
-    if file ~= nil then
+    local file = io.open(players.file, "r")
+    if file then
         local string = file:read()
         file:close()
         players.data = Json.parse(string)
@@ -30,15 +30,15 @@ end
 
 function players.save()
     -- Cria um save para o jogador
-    local filename = "players.json"
     local string = Json.stringify(players.data)
-    local file = io.open(filename,"w")
+    local file = io.open(players.file, "w")
     file:write(string)
     file:close()
 end
 
 function players.check(user, pass)
-    return players.data[user] == pass
+    value = players.data[user] == pass
+    return value
 end
 
 function Menu.load()
@@ -46,7 +46,7 @@ function Menu.load()
     
     -- Carregando o background
     background = Utils.loadImage("Imagens/background1.desfocado.jpeg", 50, 100)
-    -- Carregando o model do login
+    -- Carregando o molde do login
     moldeLogin = Utils.loadImage("Imagens/MoldeLoginTogepi.png")
     -- Carregando a logo
     logo = Utils.loadImage("Imagens/logos4.png", -80, -70)
@@ -68,9 +68,7 @@ end
 
 function Menu.update(time)
     -- Criando os botões
-    local x = 290
-    local dx = 100
-    local y = 400
+    local x,dx,y = 290,100,400
     suit.theme.color.normal = {bg = {255, 255, 225}, fg = {0, 0, 0}}
     suit.theme.color.hovered = {bg = {255, 255, 225}, fg = {0, 0, 255}}
     suit.theme.color.active = {bg = {255, 255, 225}, fg = {0, 255, 0}}
@@ -79,43 +77,38 @@ function Menu.update(time)
     local quit = suit.Button("Quit", x + dx * 2, y, 50, 70)
     
     if create.hit then
-        if inputs.check() and not players.data[user] then
+        if inputs.check() and players.data[user.name] == nil then
             players.data[inputs.login.text] = inputs.hidden
             players.save()
-            user = inputs.login.text
+            user.name = inputs.login.text
             Router.setState("Game")
         else 
             inputs.error = inputs.error + 1
-            print ("Usuário ou senha inválidos.")
         end
     elseif load.hit then
         if inputs.check() and players.check(inputs.login.text, inputs.hidden) then
-            user = inputs.login.text
+            user.name = inputs.login.text
             Router.setState("Game")
         else
             inputs.clear()
             inputs.error = inputs.error + 1
-            print("Usuário ou senha incorretos.")
         end
     elseif quit.hit then
         love.event.quit()
     end
 
     -- Criando as caixas de texto
-    local x = 330
-    local y = 290
-    local dy = 50
+    local x,y,dy = 330,290,50
     inputs.login.obj = suit.Input(inputs.login, x, y, 200, 30)
     inputs.pass.obj = suit.Input(inputs.pass, x, y + dy, 200, 30)
     
     -- Verificando se foi digitado enter
     if inputs.login.obj.submitted or inputs.pass.obj.submitted then
         if players.check(inputs.login.text, inputs.pass.text) then
-            user = inputs.login.text
+            user.name = inputs.login.text
             Router.setState("Game")
         else 
             inputs.error = inputs.error + 1
-            print("Usuário ou senha incorretos.")
         end
     end
 
@@ -143,11 +136,9 @@ function Menu.draw()
             220, 300,
             0, 0.4
         )
-        local x = 430
-        local y = 400
-        local dy = 50
-        love.graphics.print("Pet: ", x - 150, y)
-        love.graphics.print("Pass: ", x - 150, y + dy)
+        local x,y,dy = 430,400,50
+        love.graphics.print("Usuário: ", x - 150, y)
+        love.graphics.print("  Senha: ", x - 150, y + dy)
 
         if inputs.error ~= 0 then
             love.graphics.print(

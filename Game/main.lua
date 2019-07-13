@@ -3,7 +3,10 @@ suit = require("SUIT")
 Json = require("Json")
 
 -- Variáveis globais
-user = ""
+user = {
+    name = "",
+    file = function() return "Data/" .. user.name .. "Attrs.json" end,
+}
 
 -- Janela
 canvas = {
@@ -47,5 +50,5 @@ function love.load()
         .add("Menu", Menu)
         .add("Game", Game)
         .add("TicTacToe", TicTacToe)
-        .setState("TicTacToe")
+        .setState("Menu")
 end

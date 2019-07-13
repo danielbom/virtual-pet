@@ -40,5 +40,4 @@ luac.out
 *.hex
 
 # Users saves
-*Data.json
-players.json
+Game/Data/*

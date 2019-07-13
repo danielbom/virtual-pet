@@ -124,6 +124,7 @@ function Pet.New()
     function self.play()
         if self.state == "Idle" and self.energy > 40 then
             self.happy = 100
+            self.state = "Love"
             return true
         end
         return false
@@ -220,16 +221,14 @@ function Pet.New()
         return data
     end
 
-    function self.save(user)
-        local filename = user.."Data.json"
+    function self.save(filename)
         local string = Json.stringify(self.sendData())
         local file = io.open(filename,"w")
         file:write(string)
         file:close()
     end
 
-    function self.load(user)
-        local filename = user.."Data.json"
+    function self.load(filename)
         local file = io.open(filename,"r")
         local string = file:read()
         local object = Json.parse(string)
