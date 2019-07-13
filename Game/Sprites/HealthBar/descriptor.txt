@@ -1,0 +1,7 @@
+Empty 1 1
+Low 2 1
+Semilow 1 1
+Middle 1 1
+Semifull 1 1
+Full 1 1
+Complete 6 1
