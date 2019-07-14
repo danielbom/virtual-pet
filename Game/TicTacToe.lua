@@ -4,58 +4,8 @@ local Utils = require("Utils")
 TicTacToe = {}
 TicTacToe.__index = TicTacToe
 
-function createMatrix()
-    -- Matrix do jogo
-    local matrix = {{nil, nil, nil},
-                    {nil, nil, nil},
-                    {nil, nil, nil}}
-    
-    matrix.filled = 0
-    function matrix.set(x, y, value)
-        matrix[x][y] = value
-        matrix.filled = matrix.filled + 1
-    end
-    
-    function matrix.check()
-        local counterl = {{}, {}, {}}
-        local counterc = {{}, {}, {}}
-        local w = nil
-        for i = 1, 3 do
-            for j = 1, 3 do
-                if matrix[i][j] then
-                    local c = counterc[i][matrix[i][j]]
-                    counterc[i][matrix[i][j]] = c ~= nil and c + 1 or 1
-                    if w == nil and counterc[i][matrix[i][j]] == 3 then
-                        w = matrix[i][j]
-                    end
-                end
-                if matrix[j][i] then
-                    local c = counterl[i][matrix[j][i]]
-                    counterl[i][matrix[j][i]] = c ~= nil and c + 1 or 1
-                    if w == nil and counterl[i][matrix[j][i]] == 3 then
-                        w = matrix[j][i]
-                    end
-                end
-            end
-        end
-        if w ~= nil then return w end
-        if matrix[1][1] == matrix[2][2] and matrix[2][2] == matrix[3][3] then
-            return matrix[1][1]
-        elseif matrix[1][3] == matrix[2][2] and matrix[2][2] == matrix[3][1] then
-            return matrix[1][3]
-        end
-        return nil
-    end
-
-
-    function matrix.full()
-        return matrix.filled == 9
-    end
-
-    return matrix
-end
-
-function TicTacToe.load()
+function TicTacToe.load()    
+    -- Carregando música
     Musics.setCurrent("TicTacToe")
     love.graphics.setBackgroundColor(1,1,1,1)
 
@@ -76,15 +26,20 @@ function TicTacToe.load()
     x = {25, 226, 425}
     y = {25, 230, 420}
     matrix = createMatrix()
+
+    -- Configurando semente aleatória
+    math.randomseed(os.time())
+    math.random(); math.random(); math.random()
 end
 
 function TicTacToe.update(time)
+    -- Verificando pelo vencedor
     winner = matrix.check()
-    print((winner == O and "O") or (winner == X and "X") or "NO")
+    -- Executando a jogada do jogador O
+    randomLance()
 
-    local x = 650
-    local y = 320
-    local dy = 100
+    -- Definindo os botões
+    local x,y,dy = 650,320,100
     local again = suit.Button("Jogar novamente", x, y, 80, 70)
     local exit = suit.Button("Sair", x, y + dy, 80, 70)
 
@@ -115,10 +70,8 @@ end
 
 
 function TicTacToe.mousepressed( xx, yy, button, isTouch )
-    if winner == nil and not matrix.full() then
-        local d = 150
-        local xk = 0
-        local yk = 0
+    if winner == nil and not matrix.full() and current == X then
+        local d,xk,yk = 150,0,0
         for i = 1, 3 do
             if x[i] < xx and x[i] + d > xx then
                 xk = i
@@ -134,8 +87,68 @@ function TicTacToe.mousepressed( xx, yy, button, isTouch )
     end
 end
 
-function TicTacToe.mousereleased( x, y, button, isTouch )
-    -- print("release", x, y)
+function randomLance()
+    if not matrix.full() then
+        local x,y = math.random(1,3),math.random(1,3)
+        if matrix[x][y] == nil and winner == nil and current == O then
+            matrix.set(x, y, current)
+            current = current.next
+        end
+    end
+end
+
+function createMatrix()
+    -- Matrix do jogo
+    local matrix = {{nil, nil, nil},
+                    {nil, nil, nil},
+                    {nil, nil, nil}}
+    
+    matrix.filled = 0
+    function matrix.set(x, y, value)
+        matrix[x][y] = value
+        matrix.filled = matrix.filled + 1
+    end
+    
+    function matrix.check()
+        local counterl = {{}, {}, {}}
+        local counterc = {{}, {}, {}}
+        local w = nil -- winner
+        for i = 1, 3 do
+            for j = 1, 3 do
+                -- Buscando por uma linha vencedora
+                if matrix[i][j] then
+                    local c = counterc[i][matrix[i][j]]
+                    counterc[i][matrix[i][j]] = c ~= nil and c + 1 or 1
+                    if w == nil and counterc[i][matrix[i][j]] == 3 then
+                        w = matrix[i][j]
+                    end
+                end
+                -- Buscando por uma coluna vencedora
+                if matrix[j][i] then
+                    local c = counterl[i][matrix[j][i]]
+                    counterl[i][matrix[j][i]] = c ~= nil and c + 1 or 1
+                    if w == nil and counterl[i][matrix[j][i]] == 3 then
+                        w = matrix[j][i]
+                    end
+                end
+            end
+        end
+        if w ~= nil then return w end
+        -- Verificando as diagonais
+        if matrix[1][1] == matrix[2][2] and matrix[2][2] == matrix[3][3] then
+            return matrix[1][1]
+        elseif matrix[1][3] == matrix[2][2] and matrix[2][2] == matrix[3][1] then
+            return matrix[1][3]
+        end
+        return nil
+    end
+
+
+    function matrix.full()
+        return matrix.filled == 9
+    end
+
+    return matrix
 end
 
 return TicTacToe
