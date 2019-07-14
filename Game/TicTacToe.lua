@@ -6,11 +6,12 @@ TicTacToe.__index = TicTacToe
 
 function TicTacToe.load()    
     -- Carregando música
-    Musics.setCurrent("TicTacToe")
+    -- Musics.setCurrent("TicTacToe")
     love.graphics.setBackgroundColor(1,1,1,1)
 
     -- Carregando a imagem do jogo
-    game = Utils.loadImage("Imagens/TicTacToe.png")
+    game = Utils.loadImage("Imagens/TabuleiroTicTacToe.png")
+
     -- Carregando o X
     X = Utils.loadImage("Imagens/X.png")
     -- Carregando o O
@@ -23,8 +24,8 @@ function TicTacToe.load()
     winner = nil
     
     -- Posições para posicionar as sprites O e X
-    x = {25, 226, 425}
-    y = {25, 230, 420}
+    x = {70, 235, 390}
+    y = {80, 240, 400}
     matrix = createMatrix()
 
     -- Configurando semente aleatória
@@ -53,14 +54,14 @@ function TicTacToe.update(time)
 end
 
 function TicTacToe.draw()
-    love.graphics.draw(game.image, game.quad)
+    love.graphics.draw(game.image,game.quad,0,0,0, 1.5)
     for i = 1, 3 do
         for j = 1, 3 do
             if matrix[i][j] then
                 love.graphics.draw(
                     matrix[i][j].image,
                     matrix[i][j].quad,
-                    x[i], y[j], 0, 0.25
+                    x[i], y[j], 0, 0.22
                 )
             end
         end
