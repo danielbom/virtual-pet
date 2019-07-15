@@ -1,0 +1,4 @@
+None 1 1
+Draw 1 1
+Lose 1 1
+Win 1 1

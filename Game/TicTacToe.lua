@@ -1,4 +1,4 @@
-
+local ManagerAnimations = require("ManagerAnimations")
 local Utils = require("Utils")
 
 TicTacToe = {}
@@ -6,11 +6,16 @@ TicTacToe.__index = TicTacToe
 
 function TicTacToe.load()    
     -- Carregando música
-    -- Musics.setCurrent("TicTacToe")
+    Musics.setCurrent("TicTacToe")
     love.graphics.setBackgroundColor(1,1,1,1)
 
     -- Carregando a imagem do jogo
     game = Utils.loadImage("Imagens/TabuleiroTicTacToe.png")
+
+    result = ManagerAnimations.New()
+        .setX(610).setY(100).setScale(1.8)
+        .loadAnimations("/Sprites/Results/")
+        .setCurrent("None")
 
     -- Carregando o X
     X = Utils.loadImage("Imagens/X.png")
@@ -44,17 +49,32 @@ function TicTacToe.update(time)
     local again = suit.Button("Jogar novamente", x, y, 80, 70)
     local exit = suit.Button("Sair", x, y + dy, 80, 70)
 
+    -- Atualizando o resultado
+    if matrix.full() then result.setNext("Draw")
+    elseif winner == O then result.setNext("Lose")
+    elseif winner == X then result.setNext("Win")
+    end
+    result.update(time)
+
     if again.hit then
         matrix = createMatrix()
         current = winner ~= nil and winner.next or O
         winner = nil
+        result.setCurrent("None")
+        result.setNext("None")
     elseif exit.hit then
         Router.setState("Game")
     end
+
 end
 
 function TicTacToe.draw()
+    -- Desenhando o tabuleiro do jogo
     love.graphics.draw(game.image,game.quad,0,0,0, 1.5)
+
+    -- Desenhando o resultado
+    result.display()
+
     for i = 1, 3 do
         for j = 1, 3 do
             if matrix[i][j] then
