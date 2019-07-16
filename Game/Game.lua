@@ -28,6 +28,15 @@ local function loadUserData()
     end
 end
 
+local function autoSave()
+    -- Salvando os dados do usuário
+    globalTime = globalTime + time
+    if globalTime >= savePeriod then
+        pet.save(user.file())
+        globalTime = 0
+    end
+end
+
 function Game.load()
     Musics.setCurrent("Main")
     
@@ -89,12 +98,7 @@ function Game.load()
 end
 
 function Game.update(time)
-    -- Salvando os dados do usuário
-    globalTime = globalTime + time
-    if globalTime >= savePeriod then
-        pet.save(user)
-        globalTime = 0
-    end
+    autoSave()
 
     -- Atualizando o pet
     pet.update(time)
