@@ -28,7 +28,7 @@ local function loadUserData()
     end
 end
 
-local function autoSave()
+local function autoSave(time)
     -- Salvando os dados do usuário
     globalTime = globalTime + time
     if globalTime >= savePeriod then
@@ -98,7 +98,7 @@ function Game.load()
 end
 
 function Game.update(time)
-    autoSave()
+    autoSave(time)
 
     -- Atualizando o pet
     pet.update(time)
@@ -130,7 +130,7 @@ function Game.update(time)
         elseif study.hit then pet.study()
         elseif sleep.hit then pet.sleep()
         elseif play.hit and pet.play() then
-            pet.save(user)
+            autoSave(time)
             Router.setState("TicTacToe")
         end
 
@@ -140,7 +140,7 @@ function Game.update(time)
 
         if reload.hit then
             pet.reset()
-            pet.save(user)
+            autoSave(time)
         elseif exit.hit then
             os.remove(user.."Data.json")
             Router.setState("Menu")
